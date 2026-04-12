@@ -1,0 +1,12 @@
+# https://www.robotstxt.org/robotstxt.html
+User-agent: *
+Allow: /
+
+# Disallow admin pages
+Disallow: /admin/
+
+# Sitemap
+Sitemap: https://kdmc.news/sitemap.xml
+
+# Crawl-delay for polite crawling
+Crawl-delay: 1

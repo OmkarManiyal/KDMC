@@ -1,0 +1,42 @@
+[
+  {
+    "id": "news",
+    "slug": "news",
+    "name": "News",
+    "description": "Latest local news and breaking stories from KDMC",
+    "color": "#1E3A5F",
+    "icon": "Newspaper"
+  },
+  {
+    "id": "announcements",
+    "slug": "announcements",
+    "name": "Announcements",
+    "description": "Official announcements from municipal authorities",
+    "color": "#C41E3A",
+    "icon": "Megaphone"
+  },
+  {
+    "id": "civic-updates",
+    "slug": "civic-updates",
+    "name": "Civic Updates",
+    "description": "Infrastructure, services, and civic development news",
+    "color": "#2563EB",
+    "icon": "Building"
+  },
+  {
+    "id": "public-notices",
+    "slug": "public-notices",
+    "name": "Public Notices",
+    "description": "Official public notices and legal announcements",
+    "color": "#D97706",
+    "icon": "FileText"
+  },
+  {
+    "id": "events",
+    "slug": "events",
+    "name": "Events",
+    "description": "Community events, festivals, and local happenings",
+    "color": "#059669",
+    "icon": "Calendar"
+  }
+]
