@@ -14,17 +14,17 @@ import {
   getAllArticles,
   getArticleBySlug,
   getRelatedArticles,
-  getCategoryBySlug,
+  getAllCategories,
 } from '@/app/lib/data';
 import { siteSettings } from '@/app/lib/site-settings';
-import { formatDate, formatDateTime } from '@/app/lib/utils';
+import { formatDateTime } from '@/app/lib/utils';
 import { ChevronRight, Clock, Calendar, User } from 'lucide-react';
 
 interface ArticlePageProps {
   params: Promise<{ slug: string }>;
 }
 
-export async function generateStaticParams() {
+export function generateStaticParams() {
   const articles = getAllArticles();
   return articles.map((article) => ({
     slug: article.slug,
@@ -49,12 +49,12 @@ export async function generateMetadata(props: ArticlePageProps): Promise<Metadat
       title: article.title,
       description: article.excerpt,
       type: 'article',
-      publishedTime: article.publishedAt,
-      modifiedTime: article.updatedAt,
+      publishedTime: article.created_at,
+      modifiedTime: article.updated_at,
       authors: [article.author],
       images: [
         {
-          url: article.featuredImage,
+          url: article.featured_image || '/images/og-image.jpg',
           width: 1200,
           height: 630,
           alt: article.title,
@@ -65,7 +65,7 @@ export async function generateMetadata(props: ArticlePageProps): Promise<Metadat
       card: 'summary_large_image',
       title: article.title,
       description: article.excerpt,
-      images: [article.featuredImage],
+      images: [article.featured_image || '/images/og-image.jpg'],
     },
   };
 }
@@ -95,38 +95,6 @@ function ArticleContent({ content }: { content: string }) {
             </ul>
           );
         }
-        if (para.startsWith('| ')) {
-          const rows = para.split('\n').filter(line => line.startsWith('|'));
-          if (rows.length >= 2) {
-            return (
-              <div key={index} className="overflow-x-auto my-6">
-                <table className="min-w-full border border-gray-200 dark:border-gray-700 rounded-lg">
-                  <thead className="bg-gray-50 dark:bg-slate-800">
-                    <tr>
-                      {rows[0].split('|').filter(cell => cell.trim()).map((cell, i) => (
-                        <th key={i} className="px-4 py-2 text-left text-sm font-semibold text-gray-900 dark:text-white border-b border-gray-200 dark:border-gray-700">
-                          {cell.trim()}
-                        </th>
-                      ))}
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
-                    {rows.slice(2).map((row, i) => (
-                      <tr key={i} className="hover:bg-gray-50 dark:hover:bg-slate-800/50">
-                        {row.split('|').filter(cell => cell.trim()).map((cell, j) => (
-                          <td key={j} className="px-4 py-2 text-sm text-gray-700 dark:text-gray-300">
-                            {cell.trim()}
-                          </td>
-                        ))}
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            );
-          }
-          return null;
-        }
         if (para.match(/^\d+\.\s/)) {
           const items = para.split('\n').filter(line => line.match(/^\d+\.\s/));
           return (
@@ -151,18 +119,19 @@ export default async function ArticlePage(props: ArticlePageProps) {
     notFound();
   }
 
-  const category = getCategoryBySlug(article.category);
-  const relatedArticles = getRelatedArticles(article.slug, article.category, 3);
-  const articleUrl = `https://kdmc.news/article/${article.slug}`;
+  const categories = getAllCategories();
+  const category = categories.find(c => c.slug === article.category);
+  const relatedArticles = getRelatedArticles(article.category, article.slug, 3);
+  const articleUrl = `https://kdmc.vercel.app/news/${article.slug}`;
 
   const jsonLd = {
     '@context': 'https://schema.org',
     '@type': 'NewsArticle',
     headline: article.title,
     description: article.excerpt,
-    image: article.featuredImage,
-    datePublished: article.publishedAt,
-    dateModified: article.updatedAt,
+    image: article.featured_image,
+    datePublished: article.created_at,
+    dateModified: article.updated_at,
     author: {
       '@type': 'Person',
       name: article.author,
@@ -172,7 +141,7 @@ export default async function ArticlePage(props: ArticlePageProps) {
       name: 'KDMC News',
       logo: {
         '@type': 'ImageObject',
-        url: 'https://kdmc.news/images/logo.png',
+        url: 'https://kdmc.vercel.app/images/logo.png',
       },
     },
   };
@@ -192,7 +161,7 @@ export default async function ArticlePage(props: ArticlePageProps) {
             </Link>
             <ChevronRight className="w-4 h-4" />
             <Link 
-              href={`/category/${article.category}`}
+              href={`/${article.category}`}
               className="hover:text-primary dark:hover:text-white transition-colors"
             >
               {category?.name || article.category}
@@ -219,26 +188,30 @@ export default async function ArticlePage(props: ArticlePageProps) {
               </div>
               <div className="flex items-center gap-2">
                 <Calendar className="w-4 h-4" />
-                <time dateTime={article.publishedAt}>
-                  {formatDateTime(article.publishedAt)}
+                <time dateTime={article.created_at}>
+                  {formatDateTime(article.created_at)}
                 </time>
               </div>
               <div className="flex items-center gap-2">
                 <Clock className="w-4 h-4" />
-                <span>{article.readTime} min read</span>
+                <span>{article.read_time} min read</span>
               </div>
             </div>
           </header>
 
           <div className="relative aspect-[16/9] rounded-2xl overflow-hidden mb-8">
-            <Image
-              src={article.featuredImage}
-              alt={article.title}
-              fill
-              className="object-cover"
-              priority
-              sizes="(max-width: 896px) 100vw, 896px"
-            />
+            {article.featured_image ? (
+              <Image
+                src={article.featured_image}
+                alt={article.title}
+                fill
+                className="object-cover"
+                priority
+                sizes="(max-width: 896px) 100vw, 896px"
+              />
+            ) : (
+              <div className="w-full h-full bg-gradient-to-br from-primary to-primary-light" />
+            )}
           </div>
 
           <div className="my-8">
@@ -253,8 +226,8 @@ export default async function ArticlePage(props: ArticlePageProps) {
             <div className="flex items-start gap-4">
               <div className="w-16 h-16 rounded-full overflow-hidden flex-shrink-0">
                 <Image
-                  src={siteSettings.editorAvatar}
-                  alt={siteSettings.editorName}
+                  src={siteSettings.editor_avatar}
+                  alt={siteSettings.editor_name}
                   width={64}
                   height={64}
                   className="object-cover"
@@ -263,13 +236,13 @@ export default async function ArticlePage(props: ArticlePageProps) {
               <div>
                 <p className="text-sm text-gray-500 dark:text-gray-500">Written by</p>
                 <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
-                  {siteSettings.editorName}
+                  {siteSettings.editor_name}
                 </h3>
                 <p className="text-sm text-gray-600 dark:text-gray-400">
-                  {siteSettings.editorRole}
+                  {siteSettings.editor_role}
                 </p>
                 <p className="mt-2 text-sm text-gray-600 dark:text-gray-400">
-                  {siteSettings.editorBio}
+                  {siteSettings.editor_bio}
                 </p>
               </div>
             </div>

@@ -1,8 +1,6 @@
 import { Metadata } from 'next';
 import Link from 'next/link';
-import { Header, Footer, ArticleCard, Newsletter } from '@/app/components';
-import { getArchiveList, getArticlesByArchive } from '@/app/lib/data';
-import { formatMonthYear } from '@/app/lib/utils';
+import { Header, Footer, Newsletter } from '@/app/components';
 import { Calendar, ChevronRight } from 'lucide-react';
 
 export const metadata: Metadata = {
@@ -11,8 +9,6 @@ export const metadata: Metadata = {
 };
 
 export default function ArchivePage() {
-  const archiveList = getArchiveList();
-
   return (
     <>
       <Header />
@@ -42,52 +38,17 @@ export default function ArchivePage() {
             </div>
           </div>
 
-          {archiveList.length > 0 ? (
-            <div className="space-y-12">
-              {archiveList.map(({ year, month, count }) => {
-                const articles = getArticlesByArchive(year, month);
-                return (
-                  <section key={`${year}-${month}`}>
-                    <div className="flex items-center justify-between mb-6">
-                      <h2 className="text-2xl font-serif font-bold text-gray-900 dark:text-white">
-                        {formatMonthYear(month, year)}
-                      </h2>
-                      <span className="text-sm text-gray-500 dark:text-gray-500">
-                        {count} article{count !== 1 ? 's' : ''}
-                      </span>
-                    </div>
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                      {articles.slice(0, 3).map((article) => (
-                        <ArticleCard key={article.id} article={article} variant="horizontal" />
-                      ))}
-                    </div>
-                    {articles.length > 3 && (
-                      <div className="mt-4 text-center">
-                        <Link
-                          href={`/archive/${year}/${month}`}
-                          className="text-primary dark:text-accent font-medium hover:underline"
-                        >
-                          View all {articles.length} articles →
-                        </Link>
-                      </div>
-                    )}
-                  </section>
-                );
-              })}
+          <div className="text-center py-16">
+            <div className="w-16 h-16 mx-auto bg-gray-100 dark:bg-slate-800 rounded-full flex items-center justify-center mb-4">
+              <Calendar className="w-8 h-8 text-gray-400" />
             </div>
-          ) : (
-            <div className="text-center py-16">
-              <div className="w-16 h-16 mx-auto bg-gray-100 dark:bg-slate-800 rounded-full flex items-center justify-center mb-4">
-                <Calendar className="w-8 h-8 text-gray-400" />
-              </div>
-              <h2 className="text-xl font-semibold text-gray-900 dark:text-white">
-                No archived articles
-              </h2>
-              <p className="mt-2 text-gray-500 dark:text-gray-400">
-                Articles will appear here as they are published.
-              </p>
-            </div>
-          )}
+            <h2 className="text-xl font-semibold text-gray-900 dark:text-white">
+              Archive Coming Soon
+            </h2>
+            <p className="mt-2 text-gray-500 dark:text-gray-400">
+              Articles will be organized by date as they are published.
+            </p>
+          </div>
 
           <section className="mt-16">
             <Newsletter />

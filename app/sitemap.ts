@@ -2,19 +2,19 @@ import { MetadataRoute } from 'next';
 import { getAllArticles, getAllCategories } from '@/app/lib/data';
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const baseUrl = 'https://kdmc.news';
+  const baseUrl = 'https://kdmc.vercel.app';
   const articles = getAllArticles();
   const categories = getAllCategories();
 
   const articleUrls = articles.map((article) => ({
-    url: `${baseUrl}/article/${article.slug}`,
-    lastModified: new Date(article.updatedAt),
+    url: `${baseUrl}/news/${article.slug}`,
+    lastModified: new Date(article.updated_at),
     changeFrequency: 'weekly' as const,
     priority: 0.8,
   }));
 
   const categoryUrls = categories.map((category) => ({
-    url: `${baseUrl}/category/${category.slug}`,
+    url: `${baseUrl}/${category.slug}`,
     lastModified: new Date(),
     changeFrequency: 'daily' as const,
     priority: 0.6,

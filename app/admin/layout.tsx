@@ -1,8 +1,9 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { useRouter, usePathname } from 'next/navigation';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { createClient } from '@/app/lib/supabase-client';
 import {
   LayoutDashboard,
   FileText,
@@ -13,8 +14,8 @@ import {
   ChevronLeft,
   ChevronRight,
   Menu,
-  X,
   Newspaper,
+  Loader2,
 } from 'lucide-react';
 
 const navItems = [
@@ -32,7 +33,49 @@ export default function AdminLayout({
 }) {
   const [collapsed, setCollapsed] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [user, setUser] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
   const pathname = usePathname();
+  const router = useRouter();
+
+  useEffect(() => {
+    const checkUser = async () => {
+      const supabase = createClient();
+      const { data: { user } } = await supabase.auth.getUser();
+      
+      if (!user && !pathname.includes('/login')) {
+        router.push('/admin/login');
+      } else {
+        setUser(user);
+      }
+      setLoading(false);
+    };
+
+    checkUser();
+  }, [pathname, router]);
+
+  const handleSignOut = async () => {
+    const supabase = createClient();
+    await supabase.auth.signOut();
+    router.push('/admin/login');
+    router.refresh();
+  };
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gray-100 dark:bg-slate-900 flex items-center justify-center">
+        <Loader2 className="w-8 h-8 text-primary animate-spin" />
+      </div>
+    );
+  }
+
+  if (!user && !pathname.includes('/login')) {
+    return null;
+  }
+
+  if (pathname.includes('/login')) {
+    return <>{children}</>;
+  }
 
   return (
     <div className="min-h-screen bg-gray-100 dark:bg-slate-900 flex">
@@ -84,14 +127,22 @@ export default function AdminLayout({
           })}
         </nav>
 
-        <div className="absolute bottom-0 left-0 right-0 p-4 border-t border-gray-200 dark:border-slate-700">
+        <div className="absolute bottom-0 left-0 right-0 p-4 border-t border-gray-200 dark:border-slate-700 space-y-1">
           <Link
             href="/"
+            target="_blank"
             className="flex items-center gap-3 px-4 py-3 rounded-lg text-gray-600 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-slate-700 transition-colors"
           >
             <LogOut className="w-5 h-5 flex-shrink-0" />
-            {!collapsed && <span className="font-medium">Exit Admin</span>}
+            {!collapsed && <span className="font-medium">View Site</span>}
           </Link>
+          <button
+            onClick={handleSignOut}
+            className="w-full flex items-center gap-3 px-4 py-3 rounded-lg text-gray-600 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-slate-700 transition-colors"
+          >
+            <LogOut className="w-5 h-5 flex-shrink-0" />
+            {!collapsed && <span className="font-medium">Sign Out</span>}
+          </button>
         </div>
       </aside>
 
@@ -111,7 +162,7 @@ export default function AdminLayout({
             <Menu className="w-6 h-6 text-gray-600 dark:text-gray-300" />
           </button>
           <div className="text-sm text-gray-500 dark:text-gray-400">
-            Welcome back, Vijay
+            {user?.email ? `Logged in as ${user.email}` : 'Admin Panel'}
           </div>
         </header>
 

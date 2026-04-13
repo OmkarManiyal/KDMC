@@ -17,6 +17,8 @@
   "author": "Vijay Maniyal",
   "license": "ISC",
   "dependencies": {
+    "@supabase/ssr": "^0.10.2",
+    "@supabase/supabase-js": "^2.103.0",
     "@tailwindcss/postcss": "^4.2.2",
     "date-fns": "^4.1.0",
     "gray-matter": "^4.0.3",

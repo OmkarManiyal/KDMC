@@ -5,7 +5,6 @@ import {
   Footer,
   ArticleCard,
   CategoryCard,
-  EditorProfile,
   Newsletter,
   BreakingNewsTicker,
 } from '@/app/components';
@@ -18,7 +17,9 @@ import {
 import { siteSettings } from '@/app/lib/site-settings';
 import { ArrowRight, TrendingUp } from 'lucide-react';
 
-export default function HomePage() {
+export const revalidate = 60;
+
+export default async function HomePage() {
   const featuredArticles = getFeaturedArticles();
   const latestArticles = getLatestArticles(6);
   const trendingArticles = getTrendingArticles();
@@ -38,8 +39,8 @@ export default function HomePage() {
                     <div className="relative">
                       <div className="w-32 h-32 rounded-full overflow-hidden border-4 border-white/20 shadow-xl">
                         <Image
-                          src={siteSettings.editorAvatar}
-                          alt={siteSettings.editorName}
+                          src={siteSettings.editor_avatar}
+                          alt={siteSettings.editor_name}
                           width={128}
                           height={128}
                           className="object-cover"
@@ -53,19 +54,19 @@ export default function HomePage() {
                       From the Editor
                     </p>
                     <h2 className="mt-2 text-2xl font-serif font-bold">
-                      {siteSettings.editorName}
+                      {siteSettings.editor_name}
                     </h2>
                     <p className="text-white/70 text-sm">
-                      {siteSettings.editorRole}
+                      {siteSettings.editor_role}
                     </p>
                     <blockquote className="mt-4 text-white/90 italic text-sm border-l-4 border-accent pl-4 text-left w-full">
-                      {siteSettings.editorMessage}
+                      {siteSettings.editor_message}
                     </blockquote>
                     <div className="mt-6 flex gap-3">
-                      <Link href="/category/news" className="btn-primary text-sm px-5 py-2">
+                      <Link href="/news" className="btn-primary text-sm px-5 py-2">
                         Latest News
                       </Link>
-                      <Link href="/category/announcements" className="btn-secondary text-sm px-5 py-2 border-white text-white hover:bg-white hover:text-primary">
+                      <Link href="/announcements" className="btn-secondary text-sm px-5 py-2 border-white text-white hover:bg-white hover:text-primary">
                         Announcements
                       </Link>
                     </div>
@@ -74,8 +75,14 @@ export default function HomePage() {
               </div>
 
               <div className="lg:col-span-8 order-1 lg:order-2">
-                {featuredArticles.length > 0 && (
+                {featuredArticles.length > 0 ? (
                   <ArticleCard article={featuredArticles[0]} variant="featured" />
+                ) : (
+                  <div className="bg-gray-100 dark:bg-slate-800 rounded-2xl p-12 text-center">
+                    <p className="text-gray-500 dark:text-gray-400">
+                      No featured articles yet. Create one from the admin panel!
+                    </p>
+                  </div>
                 )}
               </div>
             </div>
@@ -101,17 +108,25 @@ export default function HomePage() {
             <div className="flex items-center justify-between mb-8">
               <h2 className="section-title">Latest News</h2>
               <Link
-                href="/category/news"
+                href="/news"
                 className="flex items-center gap-2 text-primary dark:text-accent font-medium hover:gap-3 transition-all"
               >
                 View all <ArrowRight className="w-4 h-4" />
               </Link>
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {latestArticles.map((article) => (
-                <ArticleCard key={article.id} article={article} />
-              ))}
-            </div>
+            {latestArticles.length > 0 ? (
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                {latestArticles.map((article) => (
+                  <ArticleCard key={article.id} article={article} />
+                ))}
+              </div>
+            ) : (
+              <div className="text-center py-12 bg-gray-100 dark:bg-slate-800 rounded-xl">
+                <p className="text-gray-500 dark:text-gray-400">
+                  No articles yet. Check back soon!
+                </p>
+              </div>
+            )}
           </section>
 
           <section className="py-12 border-t border-gray-100 dark:border-slate-800">
@@ -122,9 +137,9 @@ export default function HomePage() {
                   key={category.id}
                   name={category.name}
                   slug={category.slug}
-                  description={category.description}
-                  color={category.color}
-                  icon={category.icon}
+                  description={category.description || ''}
+                  color={category.color || '#1E3A5F'}
+                  icon={category.icon || 'Newspaper'}
                 />
               ))}
             </div>

@@ -77,7 +77,7 @@ export default function SearchBar({ onClose, autoFocus = false }: SearchBarProps
           {results.map((article) => (
             <Link
               key={article.id}
-              href={`/article/${article.slug}`}
+              href={`/news/${article.slug}`}
               onClick={onClose}
               className="flex items-center gap-4 p-4 hover:bg-gray-50 dark:hover:bg-slate-700/50 transition-colors border-b border-gray-100 dark:border-slate-700 last:border-b-0"
             >
@@ -86,7 +86,7 @@ export default function SearchBar({ onClose, autoFocus = false }: SearchBarProps
                   {article.title}
                 </p>
                 <p className="text-sm text-gray-500 dark:text-gray-400">
-                  {formatDateShort(article.publishedAt)} • {article.category.replace('-', ' ')}
+                  {formatDateShort(article.created_at)} • {article.category.replace('-', ' ')}
                 </p>
               </div>
               <ArrowRight className="w-4 h-4 text-gray-400 flex-shrink-0" />

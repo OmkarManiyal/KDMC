@@ -1,11 +1,12 @@
 'use client';
 
-import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
-import { Menu, X, Search, Moon, Sun, Newspaper } from 'lucide-react';
-import { getAllCategories } from '@/app/lib/data';
 import { siteSettings } from '@/app/lib/site-settings';
+import { socialLinks } from '@/app/lib/site-settings';
+import { getAllCategories } from '@/app/lib/data';
+import { usePathname } from 'next/navigation';
+import { useState, useEffect } from 'react';
+import { Menu, X, Search, Moon, Sun, Newspaper } from 'lucide-react';
 import SearchBar from './SearchBar';
 
 export default function Header() {
@@ -62,10 +63,10 @@ export default function Header() {
             </div>
             <div>
               <span className="text-xl font-serif font-bold text-primary dark:text-white">
-                {siteSettings.siteName}
+                {siteSettings.site_name}
               </span>
               <span className="hidden sm:block text-xs text-gray-500 dark:text-gray-400">
-                by Vijay Maniyal
+                by {siteSettings.editor_name}
               </span>
             </div>
           </Link>
@@ -84,9 +85,9 @@ export default function Header() {
             {categories.slice(0, 5).map((category) => (
               <Link
                 key={category.id}
-                href={`/category/${category.slug}`}
+                href={`/${category.slug}`}
                 className={`text-sm font-medium transition-colors ${
-                  pathname === `/category/${category.slug}`
+                  pathname === `/${category.slug}`
                     ? 'text-accent'
                     : 'text-gray-600 hover:text-primary dark:text-gray-300 dark:hover:text-white'
                 }`}
@@ -146,9 +147,9 @@ export default function Header() {
             {categories.map((category) => (
               <Link
                 key={category.id}
-                href={`/category/${category.slug}`}
+                href={`/${category.slug}`}
                 className={`px-4 py-2 rounded-lg font-medium transition-colors ${
-                  pathname === `/category/${category.slug}`
+                  pathname === `/${category.slug}`
                     ? 'bg-primary text-white'
                     : 'text-gray-600 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-slate-800'
                 }`}

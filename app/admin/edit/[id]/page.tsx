@@ -1,17 +1,36 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter, useParams } from 'next/navigation';
+import Link from 'next/link';
 import { createClient } from '@/app/lib/supabase-client';
-import { generateSlug, calculateReadTime } from '@/app/lib/utils';
-import { Save, Eye, Image as ImageIcon, X, Check, Loader2, Upload, AlertCircle } from 'lucide-react';
+import { calculateReadTime } from '@/app/lib/utils';
+import { Save, Eye, Image as ImageIcon, X, Check, Loader2, Upload, ArrowLeft } from 'lucide-react';
 
-export default function NewArticle() {
+interface Article {
+  id: string;
+  title: string;
+  slug: string;
+  content: string;
+  excerpt: string;
+  category: string;
+  featured_image: string;
+  status: string;
+  featured: boolean;
+  trending: boolean;
+}
+
+export default function EditArticle() {
   const router = useRouter();
-  const [loading, setLoading] = useState(false);
+  const params = useParams();
+  const articleId = params.id as string;
+  
+  const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
   const [uploadingImage, setUploadingImage] = useState(false);
   const [saved, setSaved] = useState(false);
   const [categories, setCategories] = useState<{ id: string; name: string; slug: string }[]>([]);
+  const [article, setArticle] = useState<Article | null>(null);
   
   const [formData, setFormData] = useState({
     title: '',
@@ -26,19 +45,45 @@ export default function NewArticle() {
   });
 
   useEffect(() => {
-    const fetchCategories = async () => {
+    const fetchData = async () => {
       const supabase = createClient();
-      const { data } = await supabase.from('categories').select('*').order('name');
-      if (data) setCategories(data);
+      
+      const [articleRes, categoriesRes] = await Promise.all([
+        supabase.from('articles').select('*').eq('id', articleId).single(),
+        supabase.from('categories').select('*').order('name'),
+      ]);
+
+      if (articleRes.data) {
+        setArticle(articleRes.data);
+        setFormData({
+          title: articleRes.data.title || '',
+          slug: articleRes.data.slug || '',
+          content: articleRes.data.content || '',
+          excerpt: articleRes.data.excerpt || '',
+          category: articleRes.data.category || 'news',
+          featured_image: articleRes.data.featured_image || '',
+          status: articleRes.data.status || 'draft',
+          featured: articleRes.data.featured || false,
+          trending: articleRes.data.trending || false,
+        });
+      }
+      
+      if (categoriesRes.data) {
+        setCategories(categoriesRes.data);
+      }
+      
+      setLoading(false);
     };
-    fetchCategories();
-  }, []);
+
+    fetchData();
+  }, [articleId]);
 
   const handleTitleChange = (value: string) => {
+    const slug = value.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
     setFormData((prev) => ({
       ...prev,
       title: value,
-      slug: generateSlug(value),
+      slug,
     }));
   };
 
@@ -50,11 +95,11 @@ export default function NewArticle() {
     const supabase = createClient();
 
     const fileName = `${Date.now()}-${file.name}`;
-    const { data, error } = await supabase.storage
+    const { error } = await supabase.storage
       .from('article-images')
       .upload(fileName, file);
 
-    if (!error && data) {
+    if (!error) {
       const { data: urlData } = supabase.storage
         .from('article-images')
         .getPublicUrl(fileName);
@@ -68,14 +113,14 @@ export default function NewArticle() {
   };
 
   const handleSubmit = async (publish: boolean) => {
-    if (!formData.title || !formData.content) return;
+    if (!article || !formData.title || !formData.content) return;
     
-    setLoading(true);
+    setSaving(true);
     const supabase = createClient();
 
-    const article = {
+    const updatedArticle = {
       title: formData.title,
-      slug: formData.slug || generateSlug(formData.title),
+      slug: formData.slug,
       content: formData.content,
       excerpt: formData.excerpt || formData.content.substring(0, 200) + '...',
       category: formData.category,
@@ -84,35 +129,61 @@ export default function NewArticle() {
       featured: formData.featured,
       trending: formData.trending,
       read_time: calculateReadTime(formData.content),
-      author: 'Vijay Maniyal',
+      updated_at: new Date().toISOString(),
     };
 
-    const { data, error } = await supabase
+    const { error } = await supabase
       .from('articles')
-      .insert(article)
-      .select()
-      .single();
+      .update(updatedArticle)
+      .eq('id', articleId);
 
-    if (!error && data) {
+    if (!error) {
       setSaved(true);
       setTimeout(() => {
         router.push('/admin/articles');
         router.refresh();
       }, 1000);
     }
-    setLoading(false);
+    setSaving(false);
   };
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center h-64">
+        <Loader2 className="w-8 h-8 text-primary animate-spin" />
+      </div>
+    );
+  }
+
+  if (!article) {
+    return (
+      <div className="text-center py-12">
+        <p className="text-gray-500 dark:text-gray-400">Article not found</p>
+        <Link href="/admin/articles" className="btn-primary mt-4 inline-block">
+          Back to Articles
+        </Link>
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
-            Create New Article
-          </h1>
-          <p className="mt-1 text-gray-500 dark:text-gray-400">
-            Write and publish a new article
-          </p>
+        <div className="flex items-center gap-4">
+          <Link
+            href="/admin/articles"
+            className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-slate-700 transition-colors"
+          >
+            <ArrowLeft className="w-5 h-5 text-gray-600 dark:text-gray-400" />
+          </Link>
+          <div>
+            <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
+              Edit Article
+            </h1>
+            <p className="mt-1 text-gray-500 dark:text-gray-400">
+              Update and manage your article
+            </p>
+          </div>
         </div>
         <div className="flex items-center gap-3">
           {saved && (
@@ -121,9 +192,19 @@ export default function NewArticle() {
               Saved!
             </span>
           )}
+          {article.status === 'published' && (
+            <Link
+              href={`/news/${article.slug}`}
+              target="_blank"
+              className="btn-secondary flex items-center gap-2"
+            >
+              <Eye className="w-5 h-5" />
+              View
+            </Link>
+          )}
           <button
             onClick={() => handleSubmit(false)}
-            disabled={loading || !formData.title}
+            disabled={saving}
             className="btn-secondary flex items-center gap-2"
           >
             <Save className="w-5 h-5" />
@@ -131,18 +212,18 @@ export default function NewArticle() {
           </button>
           <button
             onClick={() => handleSubmit(true)}
-            disabled={loading || !formData.title}
+            disabled={saving}
             className="btn-primary flex items-center gap-2"
           >
-            {loading ? (
+            {saving ? (
               <>
                 <Loader2 className="w-5 h-5 animate-spin" />
-                Publishing...
+                Saving...
               </>
             ) : (
               <>
                 <Check className="w-5 h-5" />
-                Publish
+                Save Changes
               </>
             )}
           </button>

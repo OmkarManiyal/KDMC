@@ -1,43 +1,89 @@
 'use client';
 
-import { FileText, FolderTree, Eye, TrendingUp, PlusCircle, ArrowRight } from 'lucide-react';
+import { useEffect, useState } from 'react';
 import Link from 'next/link';
-import { getTotalStats, getLatestArticles } from '@/app/lib/data';
+import { createClient } from '@/app/lib/supabase-client';
 import { formatDateShort } from '@/app/lib/utils';
-import ArticleCard from '@/app/components/ArticleCard';
+import { PlusCircle, FileText, Eye, TrendingUp, FolderTree, ArrowRight, Loader2 } from 'lucide-react';
+
+interface Article {
+  id: string;
+  title: string;
+  category: string;
+  status: string;
+  created_at: string;
+  slug: string;
+  featured: boolean;
+  trending: boolean;
+}
 
 export default function AdminDashboard() {
-  const stats = getTotalStats();
-  const latestArticles = getLatestArticles(3);
+  const [articles, setArticles] = useState<Article[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [stats, setStats] = useState({
+    total: 0,
+    published: 0,
+    drafts: 0,
+    trending: 0,
+  });
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const supabase = createClient();
+      
+      const { data: articlesData, error } = await supabase
+        .from('articles')
+        .select('*')
+        .order('created_at', { ascending: false });
+
+      if (!error && articlesData) {
+        setArticles(articlesData);
+        setStats({
+          total: articlesData.length,
+          published: articlesData.filter((a) => a.status === 'published').length,
+          drafts: articlesData.filter((a) => a.status === 'draft').length,
+          trending: articlesData.filter((a) => a.trending).length,
+        });
+      }
+      
+      setLoading(false);
+    };
+
+    fetchData();
+  }, []);
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center h-64">
+        <Loader2 className="w-8 h-8 text-primary animate-spin" />
+      </div>
+    );
+  }
 
   const statCards = [
     {
       label: 'Total Articles',
-      value: stats.totalArticles,
+      value: stats.total,
       icon: FileText,
       color: 'bg-blue-500',
-      href: '/admin/articles',
-    },
-    {
-      label: 'Categories',
-      value: stats.totalCategories,
-      icon: FolderTree,
-      color: 'bg-emerald-500',
-      href: '/admin/categories',
     },
     {
       label: 'Published',
-      value: stats.totalArticles,
+      value: stats.published,
       icon: Eye,
-      color: 'bg-purple-500',
-      href: '/',
+      color: 'bg-emerald-500',
     },
     {
       label: 'Drafts',
-      value: stats.draftArticles,
-      icon: TrendingUp,
+      value: stats.drafts,
+      icon: FileText,
       color: 'bg-amber-500',
-      href: '/admin/articles?status=draft',
+    },
+    {
+      label: 'Trending',
+      value: stats.trending,
+      icon: TrendingUp,
+      color: 'bg-purple-500',
     },
   ];
 
@@ -49,7 +95,7 @@ export default function AdminDashboard() {
             Dashboard
           </h1>
           <p className="mt-1 text-gray-500 dark:text-gray-400">
-            Overview of your KDMC News portal
+            Welcome to KDMC News Admin Panel
           </p>
         </div>
         <Link href="/admin/new" className="btn-primary flex items-center gap-2">
@@ -60,10 +106,9 @@ export default function AdminDashboard() {
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         {statCards.map((stat) => (
-          <Link
+          <div
             key={stat.label}
-            href={stat.href}
-            className="bg-white dark:bg-slate-800 rounded-xl p-6 shadow-sm border border-gray-100 dark:border-slate-700 hover:shadow-md transition-shadow"
+            className="bg-white dark:bg-slate-800 rounded-xl p-6 shadow-sm border border-gray-100 dark:border-slate-700"
           >
             <div className="flex items-center justify-between">
               <div>
@@ -78,7 +123,7 @@ export default function AdminDashboard() {
                 <stat.icon className="w-6 h-6 text-white" />
               </div>
             </div>
-          </Link>
+          </div>
         ))}
       </div>
 
@@ -94,104 +139,108 @@ export default function AdminDashboard() {
             View all <ArrowRight className="w-4 h-4" />
           </Link>
         </div>
-        <div className="p-6">
-          {latestArticles.length > 0 ? (
-            <div className="space-y-4">
-              {latestArticles.map((article) => (
-                <Link
+        <div className="overflow-x-auto">
+          <table className="w-full">
+            <thead className="bg-gray-50 dark:bg-slate-700/50">
+              <tr>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">
+                  Title
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">
+                  Category
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">
+                  Status
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">
+                  Date
+                </th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-gray-100 dark:divide-slate-700">
+              {articles.slice(0, 5).map((article) => (
+                <tr
                   key={article.id}
-                  href={`/admin/articles/${article.id}`}
-                  className="flex items-center justify-between p-4 rounded-lg hover:bg-gray-50 dark:hover:bg-slate-700/50 transition-colors"
+                  className="hover:bg-gray-50 dark:hover:bg-slate-700/50 transition-colors"
                 >
-                  <div className="flex-1 min-w-0">
-                    <p className="font-medium text-gray-900 dark:text-white truncate">
+                  <td className="px-6 py-4">
+                    <p className="font-medium text-gray-900 dark:text-white line-clamp-1">
                       {article.title}
                     </p>
-                    <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
-                      {article.category} • {formatDateShort(article.publishedAt)}
-                    </p>
-                  </div>
-                  <span
-                    className={`px-2 py-1 rounded text-xs font-medium ${
-                      article.status === 'published'
-                        ? 'bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400'
-                        : 'bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400'
-                    }`}
-                  >
-                    {article.status}
-                  </span>
-                </Link>
+                    <div className="mt-1 flex gap-2">
+                      {article.featured && (
+                        <span className="px-2 py-0.5 bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-400 rounded text-xs">
+                          Featured
+                        </span>
+                      )}
+                      {article.trending && (
+                        <span className="px-2 py-0.5 bg-orange-100 text-orange-700 dark:bg-orange-900/30 dark:text-orange-400 rounded text-xs">
+                          Trending
+                        </span>
+                      )}
+                    </div>
+                  </td>
+                  <td className="px-6 py-4">
+                    <span className="capitalize text-sm text-gray-600 dark:text-gray-400">
+                      {article.category.replace('-', ' ')}
+                    </span>
+                  </td>
+                  <td className="px-6 py-4">
+                    <span
+                      className={`px-2 py-1 rounded text-xs font-medium ${
+                        article.status === 'published'
+                          ? 'bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400'
+                          : 'bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400'
+                      }`}
+                    >
+                      {article.status}
+                    </span>
+                  </td>
+                  <td className="px-6 py-4 text-sm text-gray-500 dark:text-gray-400">
+                    {formatDateShort(article.created_at)}
+                  </td>
+                </tr>
               ))}
-            </div>
-          ) : (
-            <div className="text-center py-8">
-              <FileText className="w-12 h-12 mx-auto text-gray-300 dark:text-gray-600" />
-              <p className="mt-4 text-gray-500 dark:text-gray-400">
-                No articles yet. Start by creating one!
-              </p>
-              <Link href="/admin/new" className="btn-primary mt-4 inline-block">
-                Create Article
-              </Link>
-            </div>
-          )}
+              {articles.length === 0 && (
+                <tr>
+                  <td colSpan={4} className="px-6 py-12 text-center">
+                    <FileText className="w-12 h-12 mx-auto text-gray-300 dark:text-gray-600" />
+                    <p className="mt-4 text-gray-500 dark:text-gray-400">
+                      No articles yet. Start by creating one!
+                    </p>
+                    <Link href="/admin/new" className="btn-primary mt-4 inline-block">
+                      Create Article
+                    </Link>
+                  </td>
+                </tr>
+              )}
+            </tbody>
+          </table>
         </div>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <div className="bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-gray-100 dark:border-slate-700 p-6">
-          <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
-            Quick Actions
-          </h2>
-          <div className="grid grid-cols-2 gap-4">
-            <Link
-              href="/admin/new"
-              className="p-4 rounded-lg bg-blue-50 dark:bg-blue-900/20 hover:bg-blue-100 dark:hover:bg-blue-900/30 transition-colors"
-            >
-              <PlusCircle className="w-8 h-8 text-blue-600 dark:text-blue-400" />
-              <p className="mt-2 font-medium text-gray-900 dark:text-white">
-                New Article
-              </p>
-            </Link>
-            <Link
-              href="/"
-              className="p-4 rounded-lg bg-purple-50 dark:bg-purple-900/20 hover:bg-purple-100 dark:hover:bg-purple-900/30 transition-colors"
-            >
-              <Eye className="w-8 h-8 text-purple-600 dark:text-purple-400" />
-              <p className="mt-2 font-medium text-gray-900 dark:text-white">
-                View Site
-              </p>
-            </Link>
-          </div>
-        </div>
-
-        <div className="bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-gray-100 dark:border-slate-700 p-6">
-          <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
-            System Status
-          </h2>
-          <div className="space-y-3">
-            <div className="flex items-center justify-between">
-              <span className="text-gray-600 dark:text-gray-400">Database</span>
-              <span className="flex items-center gap-2 text-emerald-600 dark:text-emerald-400">
-                <span className="w-2 h-2 bg-emerald-500 rounded-full"></span>
-                Connected
-              </span>
-            </div>
-            <div className="flex items-center justify-between">
-              <span className="text-gray-600 dark:text-gray-400">Storage</span>
-              <span className="flex items-center gap-2 text-emerald-600 dark:text-emerald-400">
-                <span className="w-2 h-2 bg-emerald-500 rounded-full"></span>
-                Available
-              </span>
-            </div>
-            <div className="flex items-center justify-between">
-              <span className="text-gray-600 dark:text-gray-400">API</span>
-              <span className="flex items-center gap-2 text-emerald-600 dark:text-emerald-400">
-                <span className="w-2 h-2 bg-emerald-500 rounded-full"></span>
-                Operational
-              </span>
-            </div>
-          </div>
-        </div>
+        <Link
+          href="/admin/new"
+          className="p-6 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl text-white hover:shadow-lg transition-shadow"
+        >
+          <PlusCircle className="w-10 h-10 mb-4" />
+          <h3 className="text-lg font-semibold">Create New Article</h3>
+          <p className="mt-2 text-white/80 text-sm">
+            Write and publish a new article for your readers
+          </p>
+        </Link>
+        <Link
+          href="/"
+          target="_blank"
+          className="p-6 bg-gradient-to-br from-purple-500 to-purple-600 rounded-xl text-white hover:shadow-lg transition-shadow"
+        >
+          <Eye className="w-10 h-10 mb-4" />
+          <h3 className="text-lg font-semibold">View Website</h3>
+          <p className="mt-2 text-white/80 text-sm">
+            Preview your website as visitors see it
+          </p>
+        </Link>
       </div>
     </div>
   );

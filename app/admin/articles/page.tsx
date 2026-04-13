@@ -1,26 +1,83 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Link from 'next/link';
-import { getAllArticles, getAllCategories } from '@/app/lib/data';
+import { useRouter } from 'next/navigation';
+import { createClient } from '@/app/lib/supabase-client';
 import { formatDateShort } from '@/app/lib/utils';
-import { Article } from '@/app/lib/types';
-import { PlusCircle, Search, Edit, Trash2, Eye, Filter } from 'lucide-react';
+import { PlusCircle, Search, Edit, Trash2, Eye, Filter, Loader2, X, AlertTriangle } from 'lucide-react';
+
+interface Article {
+  id: string;
+  title: string;
+  category: string;
+  status: string;
+  created_at: string;
+  slug: string;
+  featured: boolean;
+  trending: boolean;
+  featured_image: string;
+}
 
 export default function AdminArticles() {
-  const articles = getAllArticles();
-  const categories = getAllCategories();
+  const [articles, setArticles] = useState<Article[]>([]);
+  const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState('all');
   const [searchQuery, setSearchQuery] = useState('');
+  const [deleteModal, setDeleteModal] = useState<{ show: boolean; article: Article | null }>({
+    show: false,
+    article: null,
+  });
+
+  const router = useRouter();
+
+  useEffect(() => {
+    fetchArticles();
+  }, []);
+
+  const fetchArticles = async () => {
+    const supabase = createClient();
+    const { data, error } = await supabase
+      .from('articles')
+      .select('*')
+      .order('created_at', { ascending: false });
+
+    if (!error && data) {
+      setArticles(data);
+    }
+    setLoading(false);
+  };
+
+  const handleDelete = async () => {
+    if (!deleteModal.article) return;
+
+    const supabase = createClient();
+    const { error } = await supabase
+      .from('articles')
+      .delete()
+      .eq('id', deleteModal.article.id);
+
+    if (!error) {
+      setArticles(articles.filter((a) => a.id !== deleteModal.article!.id));
+    }
+    setDeleteModal({ show: false, article: null });
+  };
 
   const filteredArticles = articles.filter((article) => {
     const matchesFilter = filter === 'all' || article.category === filter;
     const matchesSearch =
       !searchQuery ||
-      article.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      article.excerpt.toLowerCase().includes(searchQuery.toLowerCase());
+      article.title.toLowerCase().includes(searchQuery.toLowerCase());
     return matchesFilter && matchesSearch;
   });
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center h-64">
+        <Loader2 className="w-8 h-8 text-primary animate-spin" />
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-6">
@@ -30,7 +87,7 @@ export default function AdminArticles() {
             Articles
           </h1>
           <p className="mt-1 text-gray-500 dark:text-gray-400">
-            Manage your articles and content
+            Manage all your articles ({articles.length} total)
           </p>
         </div>
         <Link href="/admin/new" className="btn-primary flex items-center gap-2">
@@ -59,11 +116,11 @@ export default function AdminArticles() {
               className="px-4 py-2 rounded-lg border border-gray-200 dark:border-slate-600 bg-white dark:bg-slate-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary"
             >
               <option value="all">All Categories</option>
-              {categories.map((cat) => (
-                <option key={cat.id} value={cat.slug}>
-                  {cat.name}
-                </option>
-              ))}
+              <option value="news">News</option>
+              <option value="announcements">Announcements</option>
+              <option value="civic-updates">Civic Updates</option>
+              <option value="public-notices">Public Notices</option>
+              <option value="events">Events</option>
             </select>
           </div>
         </div>
@@ -79,10 +136,10 @@ export default function AdminArticles() {
                   Category
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                  Date
+                  Status
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                  Status
+                  Date
                 </th>
                 <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                   Actions
@@ -97,20 +154,39 @@ export default function AdminArticles() {
                     className="hover:bg-gray-50 dark:hover:bg-slate-700/50 transition-colors"
                   >
                     <td className="px-6 py-4">
-                      <p className="font-medium text-gray-900 dark:text-white line-clamp-1">
-                        {article.title}
-                      </p>
-                      <p className="mt-1 text-sm text-gray-500 dark:text-gray-400 line-clamp-1">
-                        {article.excerpt}
-                      </p>
+                      <div className="flex items-center gap-3">
+                        {article.featured_image ? (
+                          <img
+                            src={article.featured_image}
+                            alt=""
+                            className="w-12 h-12 rounded-lg object-cover"
+                          />
+                        ) : (
+                          <div className="w-12 h-12 rounded-lg bg-gray-200 dark:bg-slate-600" />
+                        )}
+                        <div>
+                          <p className="font-medium text-gray-900 dark:text-white line-clamp-1">
+                            {article.title}
+                          </p>
+                          <div className="mt-1 flex gap-2">
+                            {article.featured && (
+                              <span className="px-2 py-0.5 bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-400 rounded text-xs">
+                                Featured
+                              </span>
+                            )}
+                            {article.trending && (
+                              <span className="px-2 py-0.5 bg-orange-100 text-orange-700 dark:bg-orange-900/30 dark:text-orange-400 rounded text-xs">
+                                Trending
+                              </span>
+                            )}
+                          </div>
+                        </div>
+                      </div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <span className="capitalize text-sm text-gray-600 dark:text-gray-400">
                         {article.category.replace('-', ' ')}
                       </span>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
-                      {formatDateShort(article.publishedAt)}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <span
@@ -123,22 +199,30 @@ export default function AdminArticles() {
                         {article.status}
                       </span>
                     </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
+                      {formatDateShort(article.created_at)}
+                    </td>
                     <td className="px-6 py-4 whitespace-nowrap text-right">
                       <div className="flex items-center justify-end gap-2">
+                        {article.status === 'published' && (
+                          <Link
+                            href={`/news/${article.slug}`}
+                            target="_blank"
+                            className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-slate-600 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-white transition-colors"
+                            title="View"
+                          >
+                            <Eye className="w-4 h-4" />
+                          </Link>
+                        )}
                         <Link
-                          href={`/article/${article.slug}`}
-                          className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-slate-600 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-white transition-colors"
-                          title="View"
-                        >
-                          <Eye className="w-4 h-4" />
-                        </Link>
-                        <button
+                          href={`/admin/edit/${article.id}`}
                           className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-slate-600 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-white transition-colors"
                           title="Edit"
                         >
                           <Edit className="w-4 h-4" />
-                        </button>
+                        </Link>
                         <button
+                          onClick={() => setDeleteModal({ show: true, article })}
                           className="p-2 rounded-lg hover:bg-red-100 dark:hover:bg-red-900/30 text-gray-500 hover:text-red-600 dark:text-gray-400 dark:hover:text-red-400 transition-colors"
                           title="Delete"
                         >
@@ -163,6 +247,38 @@ export default function AdminArticles() {
           </table>
         </div>
       </div>
+
+      {deleteModal.show && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white dark:bg-slate-800 rounded-xl p-6 max-w-md w-full">
+            <div className="flex items-center gap-3 mb-4">
+              <div className="w-10 h-10 rounded-full bg-red-100 dark:bg-red-900/30 flex items-center justify-center">
+                <AlertTriangle className="w-5 h-5 text-red-600 dark:text-red-400" />
+              </div>
+              <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
+                Delete Article
+              </h3>
+            </div>
+            <p className="text-gray-600 dark:text-gray-400 mb-6">
+              Are you sure you want to delete &quot;{deleteModal.article?.title}&quot;? This action cannot be undone.
+            </p>
+            <div className="flex justify-end gap-3">
+              <button
+                onClick={() => setDeleteModal({ show: false, article: null })}
+                className="px-4 py-2 border border-gray-200 dark:border-slate-600 rounded-lg hover:bg-gray-50 dark:hover:bg-slate-700 transition-colors"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleDelete}
+                className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors"
+              >
+                Delete
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

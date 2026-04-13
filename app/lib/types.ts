@@ -5,11 +5,11 @@ export interface Article {
   excerpt: string;
   content: string;
   category: string;
-  featuredImage: string;
+  featured_image: string;
   author: string;
-  publishedAt: string;
-  updatedAt: string;
-  readTime: number;
+  created_at: string;
+  updated_at: string;
+  read_time: number;
   status: 'draft' | 'published';
   featured: boolean;
   trending: boolean;
@@ -22,6 +22,7 @@ export interface Category {
   description: string;
   color: string;
   icon: string;
+  created_at?: string;
 }
 
 export interface Author {
@@ -38,22 +39,18 @@ export interface Author {
 }
 
 export interface Subscriber {
+  id: string;
   email: string;
-  subscribedAt: string;
+  subscribed_at: string;
+  active: boolean;
 }
 
 export interface SiteSettings {
-  siteName: string;
-  siteDescription: string;
-  editorName: string;
-  editorRole: string;
-  editorBio: string;
-  editorAvatar: string;
-  editorMessage: string;
-  socialLinks: {
-    twitter?: string;
-    facebook?: string;
-    instagram?: string;
-    whatsapp?: string;
-  };
+  site_name: string;
+  site_description: string;
+  editor_name: string;
+  editor_role: string;
+  editor_bio: string;
+  editor_avatar: string;
+  editor_message: string;
 }
