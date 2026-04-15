@@ -13,17 +13,24 @@ import {
   getLatestArticles,
   getTrendingArticles,
   getAllCategories,
-} from '@/app/lib/data';
-import { siteSettings } from '@/app/lib/site-settings';
+  getSiteSettings,
+} from '@/app/lib/supabase-data';
+import { siteSettings as fallbackSettings } from '@/app/lib/site-settings';
 import { ArrowRight, TrendingUp } from 'lucide-react';
 
 export const revalidate = 60;
 
 export default async function HomePage() {
-  const featuredArticles = getFeaturedArticles();
-  const latestArticles = getLatestArticles(6);
-  const trendingArticles = getTrendingArticles();
-  const categories = getAllCategories();
+  const [featuredArticles, latestArticles, trendingArticles, categories, siteSettingsData] = 
+    await Promise.all([
+      getFeaturedArticles(),
+      getLatestArticles(6),
+      getTrendingArticles(),
+      getAllCategories(),
+      getSiteSettings(),
+    ]);
+
+  const settings = siteSettingsData || fallbackSettings;
 
   return (
     <>
@@ -39,8 +46,8 @@ export default async function HomePage() {
                     <div className="relative">
                       <div className="w-32 h-32 rounded-full overflow-hidden border-4 border-white/20 shadow-xl">
                         <Image
-                          src={siteSettings.editor_avatar}
-                          alt={siteSettings.editor_name}
+                          src={settings.editor_avatar || fallbackSettings.editor_avatar}
+                          alt={settings.editor_name || fallbackSettings.editor_name}
                           width={128}
                           height={128}
                           className="object-cover"
@@ -54,13 +61,13 @@ export default async function HomePage() {
                       From the Editor
                     </p>
                     <h2 className="mt-2 text-2xl font-serif font-bold">
-                      {siteSettings.editor_name}
+                      {settings.editor_name || fallbackSettings.editor_name}
                     </h2>
                     <p className="text-white/70 text-sm">
-                      {siteSettings.editor_role}
+                      {settings.editor_role || fallbackSettings.editor_role}
                     </p>
                     <blockquote className="mt-4 text-white/90 italic text-sm border-l-4 border-accent pl-4 text-left w-full">
-                      {siteSettings.editor_message}
+                      {settings.editor_message || fallbackSettings.editor_message}
                     </blockquote>
                     <div className="mt-6 flex gap-3">
                       <Link href="/news" className="btn-primary text-sm px-5 py-2">

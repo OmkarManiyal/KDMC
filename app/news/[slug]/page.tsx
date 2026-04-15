@@ -15,8 +15,9 @@ import {
   getArticleBySlug,
   getRelatedArticles,
   getAllCategories,
-} from '@/app/lib/data';
-import { siteSettings } from '@/app/lib/site-settings';
+  getSiteSettings,
+} from '@/app/lib/supabase-data';
+import { siteSettings as fallbackSettings } from '@/app/lib/site-settings';
 import { formatDateTime } from '@/app/lib/utils';
 import { ChevronRight, Clock, Calendar, User } from 'lucide-react';
 
@@ -24,8 +25,8 @@ interface ArticlePageProps {
   params: Promise<{ slug: string }>;
 }
 
-export function generateStaticParams() {
-  const articles = getAllArticles();
+export async function generateStaticParams() {
+  const articles = await getAllArticles();
   return articles.map((article) => ({
     slug: article.slug,
   }));
@@ -33,7 +34,7 @@ export function generateStaticParams() {
 
 export async function generateMetadata(props: ArticlePageProps): Promise<Metadata> {
   const { slug } = await props.params;
-  const article = getArticleBySlug(slug);
+  const article = await getArticleBySlug(slug);
   
   if (!article) {
     return {
@@ -113,15 +114,20 @@ function ArticleContent({ content }: { content: string }) {
 
 export default async function ArticlePage(props: ArticlePageProps) {
   const { slug } = await props.params;
-  const article = getArticleBySlug(slug);
+  const article = await getArticleBySlug(slug);
   
   if (!article) {
     notFound();
   }
 
-  const categories = getAllCategories();
+  const [categories, relatedArticles, siteSettingsData] = await Promise.all([
+    getAllCategories(),
+    getRelatedArticles(article.category, article.slug, 3),
+    getSiteSettings(),
+  ]);
+  
   const category = categories.find(c => c.slug === article.category);
-  const relatedArticles = getRelatedArticles(article.category, article.slug, 3);
+  const settings = siteSettingsData || fallbackSettings;
   const articleUrl = `https://kdmc.vercel.app/news/${article.slug}`;
 
   const jsonLd = {
@@ -226,8 +232,8 @@ export default async function ArticlePage(props: ArticlePageProps) {
             <div className="flex items-start gap-4">
               <div className="w-16 h-16 rounded-full overflow-hidden flex-shrink-0">
                 <Image
-                  src={siteSettings.editor_avatar}
-                  alt={siteSettings.editor_name}
+                  src={settings.editor_avatar || fallbackSettings.editor_avatar}
+                  alt={settings.editor_name || fallbackSettings.editor_name}
                   width={64}
                   height={64}
                   className="object-cover"
@@ -236,13 +242,13 @@ export default async function ArticlePage(props: ArticlePageProps) {
               <div>
                 <p className="text-sm text-gray-500 dark:text-gray-500">Written by</p>
                 <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
-                  {siteSettings.editor_name}
+                  {settings.editor_name || fallbackSettings.editor_name}
                 </h3>
                 <p className="text-sm text-gray-600 dark:text-gray-400">
-                  {siteSettings.editor_role}
+                  {settings.editor_role || fallbackSettings.editor_role}
                 </p>
                 <p className="mt-2 text-sm text-gray-600 dark:text-gray-400">
-                  {siteSettings.editor_bio}
+                  {settings.editor_bio || fallbackSettings.editor_bio}
                 </p>
               </div>
             </div>

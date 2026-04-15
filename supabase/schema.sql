@@ -115,25 +115,25 @@ CREATE POLICY "Public can view site settings"
 CREATE POLICY "Admin can manage articles"
     ON articles FOR ALL
     USING (
-        auth.jwt() ->> 'email' = 'admin@kdmc.news'
+        auth.jwt() ->> 'email' = 'dreamydaisytales@gmail.com'
     );
 
 CREATE POLICY "Admin can manage categories"
     ON categories FOR ALL
     USING (
-        auth.jwt() ->> 'email' = 'admin@kdmc.news'
+        auth.jwt() ->> 'email' = 'dreamydaisytales@gmail.com'
     );
 
 CREATE POLICY "Admin can manage subscribers"
     ON subscribers FOR ALL
     USING (
-        auth.jwt() ->> 'email' = 'admin@kdmc.news'
+        auth.jwt() ->> 'email' = 'dreamydaisytales@gmail.com'
     );
 
 CREATE POLICY "Admin can manage site settings"
     ON site_settings FOR ALL
     USING (
-        auth.jwt() ->> 'email' = 'admin@kdmc.news'
+        auth.jwt() ->> 'email' = 'dreamydaisytales@gmail.com'
     );
 
 -- PUBLIC CAN SUBSCRIBE (Insert into subscribers)
@@ -166,14 +166,14 @@ CREATE POLICY "Admin can update article images"
     ON storage.objects FOR UPDATE
     USING (
         bucket_id = 'article-images' AND
-        auth.jwt() ->> 'email' = 'admin@kdmc.news'
+        auth.jwt() ->> 'email' = 'dreamydaisytales@gmail.com'
     );
 
 CREATE POLICY "Admin can delete article images"
     ON storage.objects FOR DELETE
     USING (
         bucket_id = 'article-images' AND
-        auth.jwt() ->> 'email' = 'admin@kdmc.news'
+        auth.jwt() ->> 'email' = 'dreamydaisytales@gmail.com'
     );
 
 -- =============================================
