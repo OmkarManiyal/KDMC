@@ -58,17 +58,17 @@ export default function Footer() {
                 </Link>
               </li>
               <li>
-                <Link href="/news" className="text-gray-400 hover:text-white transition-colors">
+                <Link href="/category/news" className="text-gray-400 hover:text-white transition-colors">
                   News
                 </Link>
               </li>
               <li>
-                <Link href="/announcements" className="text-gray-400 hover:text-white transition-colors">
+                <Link href="/category/announcements" className="text-gray-400 hover:text-white transition-colors">
                   Announcements
                 </Link>
               </li>
               <li>
-                <Link href="/events" className="text-gray-400 hover:text-white transition-colors">
+                <Link href="/category/events" className="text-gray-400 hover:text-white transition-colors">
                   Events
                 </Link>
               </li>
@@ -79,12 +79,12 @@ export default function Footer() {
             <h3 className="font-semibold text-lg mb-4">Categories</h3>
             <ul className="space-y-3">
               <li>
-                <Link href="/civic-updates" className="text-gray-400 hover:text-white transition-colors">
+                <Link href="/category/civic-updates" className="text-gray-400 hover:text-white transition-colors">
                   Civic Updates
                 </Link>
               </li>
               <li>
-                <Link href="/public-notices" className="text-gray-400 hover:text-white transition-colors">
+                <Link href="/category/public-notices" className="text-gray-400 hover:text-white transition-colors">
                   Public Notices
                 </Link>
               </li>

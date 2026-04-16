@@ -167,7 +167,7 @@ export default async function ArticlePage(props: ArticlePageProps) {
             </Link>
             <ChevronRight className="w-4 h-4" />
             <Link 
-              href={`/${article.category}`}
+              href={`/category/${article.category}`}
               className="hover:text-primary dark:hover:text-white transition-colors"
             >
               {category?.name || article.category}
