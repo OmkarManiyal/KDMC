@@ -18,11 +18,11 @@ interface CategoryBadgeProps {
 }
 
 const categoryStyles: Record<string, { bg: string; text: string }> = {
-  news: { bg: 'bg-primary', text: 'text-white' },
-  announcements: { bg: 'bg-accent', text: 'text-white' },
-  'civic-updates': { bg: 'bg-blue-600', text: 'text-white' },
-  'public-notices': { bg: 'bg-amber-600', text: 'text-white' },
-  events: { bg: 'bg-emerald-600', text: 'text-white' },
+  news: { bg: 'bg-blue-900 dark:bg-blue-800', text: 'text-white' },
+  announcements: { bg: 'bg-red-700 dark:bg-red-800', text: 'text-white' },
+  'civic-updates': { bg: 'bg-blue-600 dark:bg-blue-700', text: 'text-white' },
+  'public-notices': { bg: 'bg-amber-600 dark:bg-amber-700', text: 'text-white' },
+  events: { bg: 'bg-emerald-600 dark:bg-emerald-700', text: 'text-white' },
 };
 
 const categoryIcons: Record<string, string> = {
@@ -34,7 +34,7 @@ const categoryIcons: Record<string, string> = {
 };
 
 export default function CategoryBadge({ category, size = 'sm', showIcon = false }: CategoryBadgeProps) {
-  const styles = categoryStyles[category] || { bg: 'bg-gray-600', text: 'text-white' };
+  const styles = categoryStyles[category] || { bg: 'bg-gray-600 dark:bg-gray-700', text: 'text-white' };
   const icon = categoryIcons[category] || 'Newspaper';
   const displayIcon = showIcon ? iconMap[icon] : null;
 
@@ -67,21 +67,21 @@ export function CategoryCard({ name, slug, description, color, icon, articleCoun
   return (
     <Link
       href={`/category/${slug}`}
-      className="group card p-6 flex items-start gap-4 hover:border-transparent"
+      className="group bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 p-6 flex items-start gap-4 rounded-xl transition-all hover:shadow-lg hover:border-blue-300 dark:hover:border-blue-600"
     >
       <div
         className="w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0"
-        style={{ backgroundColor: `${color}15`, color }}
+        style={{ backgroundColor: `${color}20` }}
       >
-        {iconMap[icon] || iconMap.Newspaper}
+        <span style={{ color }}>{iconMap[icon] || iconMap.Newspaper}</span>
       </div>
       <div className="flex-1 min-w-0">
         <div className="flex items-center justify-between">
-          <h3 className="font-serif font-bold text-gray-900 dark:text-white group-hover:text-primary dark:group-hover:text-accent transition-colors">
+          <h3 className="font-serif font-bold text-gray-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
             {name}
           </h3>
           {articleCount !== undefined && (
-            <span className="text-xs text-gray-500 dark:text-gray-500">
+            <span className="text-xs text-gray-500 dark:text-gray-400">
               {articleCount} articles
             </span>
           )}

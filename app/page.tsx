@@ -41,7 +41,7 @@ export default async function HomePage() {
           <section className="py-12 lg:py-16">
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12">
               <div className="lg:col-span-4 order-2 lg:order-1">
-                <div className="bg-gradient-to-br from-primary to-primary-dark rounded-2xl p-8 text-white h-full">
+                <div className="bg-gradient-to-br from-blue-900 to-blue-800 dark:from-blue-950 dark:to-blue-900 rounded-2xl p-8 text-white h-full">
                   <div className="flex flex-col items-center text-center">
                     <div className="relative">
                       <div className="w-32 h-32 rounded-full overflow-hidden border-4 border-white/20 shadow-xl">
@@ -53,11 +53,11 @@ export default async function HomePage() {
                           className="object-cover"
                         />
                       </div>
-                      <div className="absolute -bottom-2 -right-2 w-10 h-10 bg-accent rounded-full flex items-center justify-center shadow-lg">
+                      <div className="absolute -bottom-2 -right-2 w-10 h-10 bg-red-600 rounded-full flex items-center justify-center shadow-lg">
                         <span className="text-[10px] font-bold">ED</span>
                       </div>
                     </div>
-                    <p className="mt-6 text-accent-light font-mono text-xs uppercase tracking-widest">
+                    <p className="mt-6 text-blue-200 font-mono text-xs uppercase tracking-widest">
                       From the Editor
                     </p>
                     <h2 className="mt-2 text-2xl font-serif font-bold">
@@ -66,14 +66,14 @@ export default async function HomePage() {
                     <p className="text-white/70 text-sm">
                       {settings.editor_role || fallbackSettings.editor_role}
                     </p>
-                    <blockquote className="mt-4 text-white/90 italic text-sm border-l-4 border-accent pl-4 text-left w-full">
+                    <blockquote className="mt-4 text-white/90 italic text-sm border-l-4 border-red-500 pl-4 text-left w-full">
                       {settings.editor_message || fallbackSettings.editor_message}
                     </blockquote>
                     <div className="mt-6 flex gap-3">
-                      <Link href="/category/news" className="bg-white text-primary hover:bg-gray-100 text-sm px-5 py-2 rounded-lg font-semibold transition-colors">
+                      <Link href="/category/news" className="bg-white text-blue-900 hover:bg-blue-50 text-sm px-5 py-2 rounded-lg font-semibold transition-colors">
                         Latest News
                       </Link>
-                      <Link href="/category/announcements" className="border-2 border-white text-white hover:bg-white hover:text-primary text-sm px-5 py-2 rounded-lg font-semibold transition-colors">
+                      <Link href="/category/announcements" className="border-2 border-white text-white hover:bg-white hover:text-blue-900 text-sm px-5 py-2 rounded-lg font-semibold transition-colors">
                         Announcements
                       </Link>
                     </div>
@@ -85,8 +85,8 @@ export default async function HomePage() {
                 {featuredArticles.length > 0 ? (
                   <ArticleCard article={featuredArticles[0]} variant="featured" />
                 ) : (
-                  <div className="bg-gray-100 dark:bg-slate-800 rounded-2xl p-12 text-center border border-gray-200 dark:border-slate-700">
-                    <p className="text-gray-600 dark:text-slate-400">
+                  <div className="bg-gray-100 dark:bg-gray-800 rounded-2xl p-12 text-center border border-gray-200 dark:border-gray-700">
+                    <p className="text-gray-600 dark:text-gray-400">
                       No featured articles yet. Create one from the admin panel!
                     </p>
                   </div>
@@ -96,12 +96,14 @@ export default async function HomePage() {
           </section>
 
           {trendingArticles.length > 0 && (
-            <section className="py-12 border-t border-gray-200 dark:border-slate-800">
+            <section className="py-12 border-t border-gray-200 dark:border-gray-800">
               <div className="flex items-center gap-3 mb-8">
-                <div className="w-10 h-10 bg-accent/10 rounded-lg flex items-center justify-center">
-                  <TrendingUp className="w-5 h-5 text-accent" />
+                <div className="w-10 h-10 bg-red-100 dark:bg-red-900/30 rounded-lg flex items-center justify-center">
+                  <TrendingUp className="w-5 h-5 text-red-600 dark:text-red-400" />
                 </div>
-                <h2 className="section-title">Trending in Your Area</h2>
+                <h2 className="text-2xl md:text-3xl font-serif font-bold text-gray-900 dark:text-white">
+                  Trending in Your Area
+                </h2>
               </div>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                 {trendingArticles.map((article) => (
@@ -111,12 +113,14 @@ export default async function HomePage() {
             </section>
           )}
 
-          <section className="py-12 border-t border-gray-200 dark:border-slate-800">
+          <section className="py-12 border-t border-gray-200 dark:border-gray-800">
             <div className="flex items-center justify-between mb-8">
-              <h2 className="section-title">Latest News</h2>
+              <h2 className="text-2xl md:text-3xl font-serif font-bold text-gray-900 dark:text-white">
+                Latest News
+              </h2>
               <Link
                 href="/category/news"
-                className="flex items-center gap-2 text-primary dark:text-blue-400 font-medium hover:gap-3 transition-all"
+                className="flex items-center gap-2 text-blue-600 dark:text-blue-400 font-medium hover:gap-3 transition-all"
               >
                 View all <ArrowRight className="w-4 h-4" />
               </Link>
@@ -128,16 +132,18 @@ export default async function HomePage() {
                 ))}
               </div>
             ) : (
-              <div className="text-center py-12 bg-gray-100 dark:bg-slate-800 rounded-xl border border-gray-200 dark:border-slate-700">
-                <p className="text-gray-600 dark:text-slate-400">
+              <div className="text-center py-12 bg-gray-100 dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700">
+                <p className="text-gray-600 dark:text-gray-400">
                   No articles yet. Check back soon!
                 </p>
               </div>
             )}
           </section>
 
-          <section className="py-12 border-t border-gray-200 dark:border-slate-800">
-            <h2 className="section-title mb-8">Browse by Category</h2>
+          <section className="py-12 border-t border-gray-200 dark:border-gray-800">
+            <h2 className="text-2xl md:text-3xl font-serif font-bold text-gray-900 dark:text-white mb-8">
+              Browse by Category
+            </h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
               {categories.map((category) => (
                 <CategoryCard

@@ -33,7 +33,7 @@ export default function Newsletter() {
   };
 
   return (
-    <section className="bg-gradient-to-r from-primary via-primary-light to-primary rounded-2xl p-8 md:p-12 text-white">
+    <section className="bg-gradient-to-r from-blue-900 via-blue-800 to-blue-900 dark:from-blue-950 dark:via-blue-900 dark:to-blue-950 rounded-2xl p-8 md:p-12 text-white">
       <div className="max-w-2xl mx-auto text-center">
         <h2 className="text-2xl md:text-3xl font-serif font-bold">
           Stay Informed
@@ -54,11 +54,11 @@ export default function Newsletter() {
                 }}
                 placeholder="your.email@example.com"
                 className={`w-full px-4 py-3 rounded-lg bg-white/10 border-2 ${
-                  status === 'error' ? 'border-accent' : 'border-white/20'
+                  status === 'error' ? 'border-red-400' : 'border-white/20'
                 } placeholder-white/50 text-white focus:outline-none focus:border-white/50 transition-colors`}
               />
               {status === 'error' && (
-                <div className="absolute -bottom-6 left-0 flex items-center gap-1 text-accent-light text-sm">
+                <div className="absolute -bottom-6 left-0 flex items-center gap-1 text-red-300 text-sm">
                   <AlertCircle className="w-4 h-4" />
                   <span>{error}</span>
                 </div>
@@ -70,7 +70,7 @@ export default function Newsletter() {
               className={`px-6 py-3 rounded-lg font-semibold flex items-center justify-center gap-2 transition-all ${
                 status === 'success'
                   ? 'bg-emerald-500 text-white'
-                  : 'bg-white text-primary hover:bg-white/90'
+                  : 'bg-white text-blue-900 hover:bg-blue-50'
               } disabled:opacity-70`}
             >
               {status === 'loading' && (

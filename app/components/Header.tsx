@@ -8,14 +8,15 @@ import { Menu, X, Search, Moon, Sun, Newspaper } from 'lucide-react';
 import SearchBar from './SearchBar';
 import { createClient } from '@/app/lib/supabase-client';
 import { Category } from '@/app/lib/types';
+import { useTheme } from './ThemeProvider';
 
 export default function Header() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [isDark, setIsDark] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [categories, setCategories] = useState<Category[]>([]);
   const pathname = usePathname();
+  const { theme, toggleTheme } = useTheme();
 
   useEffect(() => {
     async function fetchCategories() {
@@ -44,55 +45,25 @@ export default function Header() {
     setIsSearchOpen(false);
   }, [pathname]);
 
-  useEffect(() => {
-    const checkDarkMode = () => {
-      const isDarkMode = document.documentElement.classList.contains('dark');
-      setIsDark(isDarkMode);
-    };
-    
-    checkDarkMode();
-    
-    const observer = new MutationObserver(checkDarkMode);
-    observer.observe(document.documentElement, { 
-      attributes: true, 
-      attributeFilter: ['class'] 
-    });
-    
-    return () => observer.disconnect();
-  }, []);
-
-  const toggleDarkMode = () => {
-    const willBeDark = !isDark;
-    setIsDark(willBeDark);
-    
-    if (willBeDark) {
-      document.documentElement.classList.add('dark');
-      localStorage.setItem('theme', 'dark');
-    } else {
-      document.documentElement.classList.remove('dark');
-      localStorage.setItem('theme', 'light');
-    }
-  };
-
   return (
     <header
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
         isScrolled
-          ? 'bg-white/98 dark:bg-slate-900/98 backdrop-blur-sm shadow-sm border-b border-gray-200 dark:border-slate-700 py-3'
-          : 'bg-white dark:bg-slate-900 border-b border-gray-200 dark:border-slate-800 py-4'
+          ? 'bg-white/98 dark:bg-gray-950/98 backdrop-blur-sm shadow-sm border-b border-gray-200 dark:border-gray-800 py-3'
+          : 'bg-white dark:bg-gray-950 border-b border-gray-200 dark:border-gray-800 py-4'
       }`}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between">
           <Link href="/" className="flex items-center gap-3 group">
-            <div className="w-10 h-10 bg-primary rounded-lg flex items-center justify-center group-hover:bg-primary-light transition-colors">
+            <div className="w-10 h-10 bg-blue-900 dark:bg-blue-800 rounded-lg flex items-center justify-center group-hover:bg-blue-800 dark:group-hover:bg-blue-700 transition-colors">
               <Newspaper className="w-6 h-6 text-white" />
             </div>
             <div>
               <span className="text-xl font-serif font-bold text-gray-900 dark:text-white">
                 {siteSettings.site_name}
               </span>
-              <span className="hidden sm:block text-xs text-gray-500 dark:text-slate-400">
+              <span className="hidden sm:block text-xs text-gray-500 dark:text-gray-400">
                 by {siteSettings.editor_name}
               </span>
             </div>
@@ -103,8 +74,8 @@ export default function Header() {
               href="/"
               className={`px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
                 pathname === '/'
-                  ? 'text-accent bg-accent/10'
-                  : 'text-gray-700 dark:text-slate-300 hover:text-primary dark:hover:text-white hover:bg-gray-50 dark:hover:bg-slate-800'
+                  ? 'text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-950'
+                  : 'text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-gray-50 dark:hover:bg-gray-900'
               }`}
             >
               Home
@@ -115,8 +86,8 @@ export default function Header() {
                 href={`/category/${category.slug}`}
                 className={`px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
                   pathname === `/category/${category.slug}`
-                    ? 'text-accent bg-accent/10'
-                    : 'text-gray-700 dark:text-slate-300 hover:text-primary dark:hover:text-white hover:bg-gray-50 dark:hover:bg-slate-800'
+                    ? 'text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-950'
+                    : 'text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-gray-50 dark:hover:bg-gray-900'
                 }`}
               >
                 {category.name}
@@ -127,21 +98,25 @@ export default function Header() {
           <div className="flex items-center gap-2">
             <button
               onClick={() => setIsSearchOpen(!isSearchOpen)}
-              className="p-2 rounded-lg text-gray-600 dark:text-slate-400 hover:text-primary dark:hover:text-white hover:bg-gray-100 dark:hover:bg-slate-800 transition-colors"
+              className="p-2 rounded-lg text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-gray-100 dark:hover:bg-gray-900 transition-colors"
               aria-label="Search"
             >
               <Search className="w-5 h-5" />
             </button>
             <button
-              onClick={toggleDarkMode}
-              className="p-2 rounded-lg text-gray-600 dark:text-slate-400 hover:text-primary dark:hover:text-white hover:bg-gray-100 dark:hover:bg-slate-800 transition-colors"
-              aria-label="Toggle dark mode"
+              onClick={toggleTheme}
+              className="p-2 rounded-lg text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-gray-100 dark:hover:bg-gray-900 transition-colors"
+              aria-label="Toggle theme"
             >
-              {isDark ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
+              {theme === 'dark' ? (
+                <Sun className="w-5 h-5" />
+              ) : (
+                <Moon className="w-5 h-5" />
+              )}
             </button>
             <button
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              className="lg:hidden p-2 rounded-lg text-gray-600 dark:text-slate-400 hover:text-primary dark:hover:text-white hover:bg-gray-100 dark:hover:bg-slate-800 transition-colors"
+              className="lg:hidden p-2 rounded-lg text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-gray-100 dark:hover:bg-gray-900 transition-colors"
               aria-label="Menu"
             >
               {isMobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
@@ -156,7 +131,7 @@ export default function Header() {
         )}
 
         <nav
-          className={`lg:hidden mt-4 pb-4 border-t border-gray-200 dark:border-slate-700 ${
+          className={`lg:hidden mt-4 pb-4 border-t border-gray-200 dark:border-gray-800 ${
             isMobileMenuOpen ? 'block' : 'hidden'
           }`}
         >
@@ -165,8 +140,8 @@ export default function Header() {
               href="/"
               className={`px-4 py-2.5 rounded-lg font-medium transition-colors ${
                 pathname === '/'
-                  ? 'bg-primary text-white'
-                  : 'text-gray-800 dark:text-slate-200 hover:bg-gray-100 dark:hover:bg-slate-800'
+                  ? 'bg-blue-900 dark:bg-blue-800 text-white'
+                  : 'text-gray-800 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-900'
               }`}
             >
               Home
@@ -177,8 +152,8 @@ export default function Header() {
                 href={`/category/${category.slug}`}
                 className={`px-4 py-2.5 rounded-lg font-medium transition-colors ${
                   pathname === `/category/${category.slug}`
-                    ? 'bg-primary text-white'
-                    : 'text-gray-800 dark:text-slate-200 hover:bg-gray-100 dark:hover:bg-slate-800'
+                    ? 'bg-blue-900 dark:bg-blue-800 text-white'
+                    : 'text-gray-800 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-900'
                 }`}
               >
                 {category.name}
