@@ -16,11 +16,11 @@ export default function Footer() {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z" />
                 </svg>
               </div>
-              <span className="text-xl font-serif font-bold text-white">
+              <span className="text-xl font-bold text-white">
                 {siteSettings.site_name}
               </span>
             </Link>
-            <p className="mt-4 text-gray-400 max-w-md">
+            <p className="mt-4 text-gray-300 max-w-md">
               {siteSettings.site_description}
             </p>
             <div className="mt-6 flex items-center gap-4">
@@ -50,25 +50,25 @@ export default function Footer() {
           </div>
 
           <div>
-            <h3 className="font-semibold text-lg mb-4 text-white">Quick Links</h3>
+            <h3 className="font-bold text-lg mb-4 text-white">Quick Links</h3>
             <ul className="space-y-3">
               <li>
-                <Link href="/" className="text-gray-400 hover:text-white transition-colors">
+                <Link href="/" className="text-gray-300 hover:text-white transition-colors font-medium">
                   Home
                 </Link>
               </li>
               <li>
-                <Link href="/category/news" className="text-gray-400 hover:text-white transition-colors">
+                <Link href="/category/news" className="text-gray-300 hover:text-white transition-colors font-medium">
                   News
                 </Link>
               </li>
               <li>
-                <Link href="/category/announcements" className="text-gray-400 hover:text-white transition-colors">
+                <Link href="/category/announcements" className="text-gray-300 hover:text-white transition-colors font-medium">
                   Announcements
                 </Link>
               </li>
               <li>
-                <Link href="/category/events" className="text-gray-400 hover:text-white transition-colors">
+                <Link href="/category/events" className="text-gray-300 hover:text-white transition-colors font-medium">
                   Events
                 </Link>
               </li>
@@ -76,20 +76,20 @@ export default function Footer() {
           </div>
 
           <div>
-            <h3 className="font-semibold text-lg mb-4 text-white">Categories</h3>
+            <h3 className="font-bold text-lg mb-4 text-white">Categories</h3>
             <ul className="space-y-3">
               <li>
-                <Link href="/category/civic-updates" className="text-gray-400 hover:text-white transition-colors">
+                <Link href="/category/civic-updates" className="text-gray-300 hover:text-white transition-colors font-medium">
                   Civic Updates
                 </Link>
               </li>
               <li>
-                <Link href="/category/public-notices" className="text-gray-400 hover:text-white transition-colors">
+                <Link href="/category/public-notices" className="text-gray-300 hover:text-white transition-colors font-medium">
                   Public Notices
                 </Link>
               </li>
               <li>
-                <Link href="/archive" className="text-gray-400 hover:text-white transition-colors">
+                <Link href="/archive" className="text-gray-300 hover:text-white transition-colors font-medium">
                   Archive
                 </Link>
               </li>
@@ -98,10 +98,10 @@ export default function Footer() {
         </div>
 
         <div className="mt-12 pt-8 border-t border-gray-800 flex flex-col md:flex-row items-center justify-between gap-4">
-          <p className="text-gray-500 text-sm">
+          <p className="text-gray-400 text-sm">
             © {currentYear} {siteSettings.site_name}. All rights reserved.
           </p>
-          <p className="text-gray-500 text-sm">
+          <p className="text-gray-400 text-sm">
             Powered by passion for local journalism | {siteSettings.editor_name}
           </p>
         </div>

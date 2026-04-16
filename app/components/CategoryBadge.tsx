@@ -46,7 +46,7 @@ export default function CategoryBadge({ category, size = 'sm', showIcon = false 
 
   return (
     <span
-      className={`inline-flex items-center gap-1.5 rounded-full font-mono font-medium uppercase tracking-wider ${styles.bg} ${styles.text} ${sizeClasses[size]}`}
+      className={`inline-flex items-center gap-1.5 rounded-full font-mono font-semibold uppercase tracking-wider ${styles.bg} ${styles.text} ${sizeClasses[size]}`}
     >
       {displayIcon}
       {category.replace('-', ' ')}
@@ -77,11 +77,11 @@ export function CategoryCard({ name, slug, description, color, icon, articleCoun
       </div>
       <div className="flex-1 min-w-0">
         <div className="flex items-center justify-between">
-          <h3 className="font-serif font-bold text-gray-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
+          <h3 className="font-bold text-gray-900 dark:text-white text-lg group-hover:text-blue-700 dark:group-hover:text-blue-400 transition-colors">
             {name}
           </h3>
           {articleCount !== undefined && (
-            <span className="text-xs text-gray-500 dark:text-gray-400">
+            <span className="text-xs text-gray-600 dark:text-gray-400 font-medium">
               {articleCount} articles
             </span>
           )}

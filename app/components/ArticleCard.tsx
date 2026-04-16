@@ -89,7 +89,7 @@ export default function ArticleCard({ article, variant = 'default' }: ArticleCar
             {article.excerpt}
           </p>
           <div className="mt-4 flex items-center gap-4 text-sm text-gray-300">
-            <span>{article.author}</span>
+            <span className="font-medium">{article.author}</span>
             <span>•</span>
             <span>{formatDateShort(article.created_at)}</span>
             <span>•</span>
@@ -115,14 +115,14 @@ export default function ArticleCard({ article, variant = 'default' }: ArticleCar
         <div className="flex-1 p-5 flex flex-col">
           <CategoryBadge category={article.category} size="sm" />
           <Link href={articleUrl}>
-            <h3 className="mt-2 text-lg font-serif font-bold text-gray-900 dark:text-white leading-snug group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors line-clamp-2">
+            <h3 className="mt-2 text-lg font-bold text-gray-900 dark:text-white leading-snug group-hover:text-blue-700 dark:group-hover:text-blue-400 transition-colors line-clamp-2">
               {article.title}
             </h3>
           </Link>
           <p className="mt-2 text-sm text-gray-600 dark:text-gray-400 line-clamp-2 flex-1">
             {article.excerpt}
           </p>
-          <div className="mt-4 flex items-center gap-3 text-xs text-gray-500 dark:text-gray-400">
+          <div className="mt-4 flex items-center gap-3 text-xs text-gray-600 dark:text-gray-400 font-medium">
             <span>{article.author}</span>
             <span>•</span>
             <span>{formatDateShort(article.created_at)}</span>
@@ -139,11 +139,11 @@ export default function ArticleCard({ article, variant = 'default' }: ArticleCar
           <div className="flex-1 min-w-0">
             <CategoryBadge category={article.category} size="xs" />
             <Link href={articleUrl}>
-              <h3 className="mt-1 text-sm font-medium text-gray-900 dark:text-gray-100 leading-snug group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors line-clamp-2">
+              <h3 className="mt-1 text-sm font-semibold text-gray-900 dark:text-gray-100 leading-snug group-hover:text-blue-700 dark:group-hover:text-blue-400 transition-colors line-clamp-2">
                 {article.title}
               </h3>
             </Link>
-            <span className="mt-1 text-xs text-gray-500 dark:text-gray-400">
+            <span className="mt-1 text-xs text-gray-600 dark:text-gray-400 font-medium">
               {formatDateShort(article.created_at)}
             </span>
           </div>
@@ -166,15 +166,15 @@ export default function ArticleCard({ article, variant = 'default' }: ArticleCar
       <div className="p-5">
         <CategoryBadge category={article.category} size="sm" />
         <Link href={articleUrl}>
-          <h3 className="mt-2 text-lg font-serif font-bold text-gray-900 dark:text-white leading-snug group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors line-clamp-2">
+          <h3 className="mt-2 text-lg font-bold text-gray-900 dark:text-white leading-snug group-hover:text-blue-700 dark:group-hover:text-blue-400 transition-colors line-clamp-2">
             {article.title}
           </h3>
         </Link>
         <p className="mt-2 text-sm text-gray-600 dark:text-gray-400 line-clamp-3">
           {article.excerpt}
         </p>
-        <div className="mt-4 flex items-center justify-between text-xs text-gray-500 dark:text-gray-400">
-          <span>{article.author}</span>
+        <div className="mt-4 flex items-center justify-between text-xs text-gray-600 dark:text-gray-400 font-medium">
+          <span className="font-semibold">{article.author}</span>
           <div className="flex items-center gap-2">
             <span>{formatDateShort(article.created_at)}</span>
             <span>•</span>
