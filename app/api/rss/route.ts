@@ -1,4 +1,4 @@
-import { getAllArticles } from '../lib/supabase-data';
+import { getAllArticles } from '@/app/lib/supabase-data';
 import { format } from 'date-fns';
 
 export const dynamic = 'force-dynamic';
