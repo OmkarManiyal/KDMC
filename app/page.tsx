@@ -70,10 +70,10 @@ export default async function HomePage() {
                       {settings.editor_message || fallbackSettings.editor_message}
                     </blockquote>
                     <div className="mt-6 flex gap-3">
-                      <Link href="/news" className="btn-primary text-sm px-5 py-2">
+                      <Link href="/category/news" className="bg-white text-primary hover:bg-gray-100 text-sm px-5 py-2 rounded-lg font-semibold transition-colors">
                         Latest News
                       </Link>
-                      <Link href="/announcements" className="btn-secondary text-sm px-5 py-2 border-white text-white hover:bg-white hover:text-primary">
+                      <Link href="/category/announcements" className="border-2 border-white text-white hover:bg-white hover:text-primary text-sm px-5 py-2 rounded-lg font-semibold transition-colors">
                         Announcements
                       </Link>
                     </div>
@@ -115,7 +115,7 @@ export default async function HomePage() {
             <div className="flex items-center justify-between mb-8">
               <h2 className="section-title">Latest News</h2>
               <Link
-                href="/news"
+                href="/category/news"
                 className="flex items-center gap-2 text-primary dark:text-accent font-medium hover:gap-3 transition-all"
               >
                 View all <ArrowRight className="w-4 h-4" />

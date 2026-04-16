@@ -101,6 +101,7 @@ body {
 .dark .btn-secondary:hover {
   background-color: #334155;
   border-color: #64748b;
+  color: white;
 }
 
 .card {
@@ -181,7 +182,7 @@ body {
 }
 
 .dark .prose-article {
-  color: #d1d5db;
+  color: #cbd5e1;
 }
 
 .dark .prose-article h2,
@@ -224,6 +225,7 @@ body {
 input, textarea, select {
   color: #111827;
   background-color: white;
+  border-color: #d1d5db;
 }
 
 .dark input, 
@@ -231,7 +233,7 @@ input, textarea, select {
 .dark select {
   color: #f1f5f9;
   background-color: #1e293b;
-  border-color: #334155;
+  border-color: #475569;
 }
 
 input:focus, textarea:focus, select:focus {
@@ -245,4 +247,26 @@ input:focus, textarea:focus, select:focus {
 .dark select:focus {
   border-color: var(--color-accent);
   box-shadow: 0 0 0 3px rgba(196, 30, 58, 0.2);
+}
+
+.dark input::placeholder,
+.dark textarea::placeholder {
+  color: #94a3b8;
+}
+
+a {
+  color: var(--color-primary);
+  transition: color 0.2s;
+}
+
+a:hover {
+  color: var(--color-primary-light);
+}
+
+.dark a {
+  color: #60a5fa;
+}
+
+.dark a:hover {
+  color: #93c5fd;
 }
