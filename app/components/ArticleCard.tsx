@@ -1,12 +1,65 @@
+'use client';
+
 import Link from 'next/link';
 import Image from 'next/image';
 import { Article } from '@/app/lib/types';
 import { formatDateShort } from '@/app/lib/utils';
 import CategoryBadge from './CategoryBadge';
+import { useState } from 'react';
 
 interface ArticleCardProps {
   article: Article;
   variant?: 'default' | 'featured' | 'horizontal' | 'compact';
+}
+
+function ArticleImage({ 
+  src, 
+  alt, 
+  fill = false,
+  className = '',
+  sizes = '(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw'
+}: { 
+  src: string | null | undefined; 
+  alt: string; 
+  fill?: boolean;
+  className?: string;
+  sizes?: string;
+}) {
+  const [error, setError] = useState(false);
+  const [loaded, setLoaded] = useState(false);
+
+  if (!src || error) {
+    return (
+      <div className={`bg-gradient-to-br from-primary to-primary-light flex items-center justify-center ${className}`}>
+        <span className="text-white/50 text-4xl">📰</span>
+      </div>
+    );
+  }
+
+  if (fill) {
+    return (
+      <Image
+        src={src}
+        alt={alt}
+        fill
+        className={`object-cover transition-transform duration-300 ${className} ${!loaded ? 'invisible' : 'visible'}`}
+        sizes={sizes}
+        onError={() => setError(true)}
+        onLoad={() => setLoaded(true)}
+      />
+    );
+  }
+
+  return (
+    <Image
+      src={src}
+      alt={alt}
+      width={400}
+      height={300}
+      className={`object-cover ${className}`}
+      onError={() => setError(true)}
+    />
+  );
 }
 
 export default function ArticleCard({ article, variant = 'default' }: ArticleCardProps) {
@@ -16,17 +69,13 @@ export default function ArticleCard({ article, variant = 'default' }: ArticleCar
     return (
       <article className="group relative overflow-hidden rounded-2xl">
         <div className="relative aspect-[16/9] md:aspect-[21/9]">
-          {article.featured_image ? (
-            <Image
-              src={article.featured_image}
-              alt={article.title}
-              fill
-              className="object-cover transition-transform duration-500 group-hover:scale-105"
-              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 100vw, 100vw"
-            />
-          ) : (
-            <div className="w-full h-full bg-gradient-to-br from-primary to-primary-light" />
-          )}
+          <ArticleImage
+            src={article.featured_image}
+            alt={article.title}
+            fill
+            className="group-hover:scale-105"
+            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 100vw, 100vw"
+          />
           <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent" />
         </div>
         <div className="absolute bottom-0 left-0 right-0 p-6 md:p-8">
@@ -55,17 +104,13 @@ export default function ArticleCard({ article, variant = 'default' }: ArticleCar
     return (
       <article className="group card overflow-hidden flex flex-col sm:flex-row">
         <div className="relative h-48 sm:h-auto sm:w-1/3">
-          {article.featured_image ? (
-            <Image
-              src={article.featured_image}
-              alt={article.title}
-              fill
-              className="object-cover transition-transform duration-300 group-hover:scale-105"
-              sizes="(max-width: 640px) 100vw, 33vw"
-            />
-          ) : (
-            <div className="w-full h-full bg-gradient-to-br from-primary to-primary-light" />
-          )}
+          <ArticleImage
+            src={article.featured_image}
+            alt={article.title}
+            fill
+            className="group-hover:scale-105"
+            sizes="(max-width: 640px) 100vw, 33vw"
+          />
         </div>
         <div className="flex-1 p-5 flex flex-col">
           <CategoryBadge category={article.category} size="sm" />
@@ -110,17 +155,13 @@ export default function ArticleCard({ article, variant = 'default' }: ArticleCar
   return (
     <article className="group card overflow-hidden">
       <div className="relative h-48 overflow-hidden">
-        {article.featured_image ? (
-          <Image
-            src={article.featured_image}
-            alt={article.title}
-            fill
-            className="object-cover transition-transform duration-300 group-hover:scale-105"
-            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-          />
-        ) : (
-          <div className="w-full h-full bg-gradient-to-br from-primary to-primary-light" />
-        )}
+        <ArticleImage
+          src={article.featured_image}
+          alt={article.title}
+          fill
+          className="group-hover:scale-105"
+          sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+        />
       </div>
       <div className="p-5">
         <CategoryBadge category={article.category} size="sm" />
