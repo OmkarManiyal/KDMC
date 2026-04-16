@@ -85,8 +85,8 @@ export default async function HomePage() {
                 {featuredArticles.length > 0 ? (
                   <ArticleCard article={featuredArticles[0]} variant="featured" />
                 ) : (
-                  <div className="bg-gray-100 dark:bg-slate-800 rounded-2xl p-12 text-center">
-                    <p className="text-gray-500 dark:text-gray-400">
+                  <div className="bg-gray-100 dark:bg-slate-800 rounded-2xl p-12 text-center border border-gray-200 dark:border-slate-700">
+                    <p className="text-gray-600 dark:text-slate-400">
                       No featured articles yet. Create one from the admin panel!
                     </p>
                   </div>
@@ -96,7 +96,7 @@ export default async function HomePage() {
           </section>
 
           {trendingArticles.length > 0 && (
-            <section className="py-12 border-t border-gray-100 dark:border-slate-800">
+            <section className="py-12 border-t border-gray-200 dark:border-slate-800">
               <div className="flex items-center gap-3 mb-8">
                 <div className="w-10 h-10 bg-accent/10 rounded-lg flex items-center justify-center">
                   <TrendingUp className="w-5 h-5 text-accent" />
@@ -111,12 +111,12 @@ export default async function HomePage() {
             </section>
           )}
 
-          <section className="py-12 border-t border-gray-100 dark:border-slate-800">
+          <section className="py-12 border-t border-gray-200 dark:border-slate-800">
             <div className="flex items-center justify-between mb-8">
               <h2 className="section-title">Latest News</h2>
               <Link
                 href="/category/news"
-                className="flex items-center gap-2 text-primary dark:text-accent font-medium hover:gap-3 transition-all"
+                className="flex items-center gap-2 text-primary dark:text-blue-400 font-medium hover:gap-3 transition-all"
               >
                 View all <ArrowRight className="w-4 h-4" />
               </Link>
@@ -128,15 +128,15 @@ export default async function HomePage() {
                 ))}
               </div>
             ) : (
-              <div className="text-center py-12 bg-gray-100 dark:bg-slate-800 rounded-xl">
-                <p className="text-gray-500 dark:text-gray-400">
+              <div className="text-center py-12 bg-gray-100 dark:bg-slate-800 rounded-xl border border-gray-200 dark:border-slate-700">
+                <p className="text-gray-600 dark:text-slate-400">
                   No articles yet. Check back soon!
                 </p>
               </div>
             )}
           </section>
 
-          <section className="py-12 border-t border-gray-100 dark:border-slate-800">
+          <section className="py-12 border-t border-gray-200 dark:border-slate-800">
             <h2 className="section-title mb-8">Browse by Category</h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
               {categories.map((category) => (

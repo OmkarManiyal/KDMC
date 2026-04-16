@@ -16,7 +16,7 @@ export default function Footer() {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z" />
                 </svg>
               </div>
-              <span className="text-xl font-serif font-bold">
+              <span className="text-xl font-serif font-bold text-white">
                 {siteSettings.site_name}
               </span>
             </Link>
@@ -50,7 +50,7 @@ export default function Footer() {
           </div>
 
           <div>
-            <h3 className="font-semibold text-lg mb-4">Quick Links</h3>
+            <h3 className="font-semibold text-lg mb-4 text-white">Quick Links</h3>
             <ul className="space-y-3">
               <li>
                 <Link href="/" className="text-gray-400 hover:text-white transition-colors">
@@ -76,7 +76,7 @@ export default function Footer() {
           </div>
 
           <div>
-            <h3 className="font-semibold text-lg mb-4">Categories</h3>
+            <h3 className="font-semibold text-lg mb-4 text-white">Categories</h3>
             <ul className="space-y-3">
               <li>
                 <Link href="/category/civic-updates" className="text-gray-400 hover:text-white transition-colors">
