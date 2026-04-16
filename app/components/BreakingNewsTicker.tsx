@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
-import { getLatestArticles } from '@/app/lib/data';
+import { createClient } from '@/app/lib/supabase-client';
 import { Article } from '@/app/lib/types';
 import { ExternalLink } from 'lucide-react';
 
@@ -11,8 +11,19 @@ export default function BreakingNewsTicker() {
   const [isPaused, setIsPaused] = useState(false);
 
   useEffect(() => {
-    const latest = getLatestArticles(3);
-    setArticles(latest);
+    async function fetchArticles() {
+      const supabase = createClient();
+      const { data } = await supabase
+        .from('articles')
+        .select('*')
+        .eq('status', 'published')
+        .order('created_at', { ascending: false })
+        .limit(3);
+      if (data) {
+        setArticles(data);
+      }
+    }
+    fetchArticles();
   }, []);
 
   if (articles.length === 0) return null;
@@ -39,7 +50,7 @@ export default function BreakingNewsTicker() {
               {[...articles, ...articles].map((article, idx) => (
                 <Link
                   key={`${article.id}-${idx}`}
-                  href={`/article/${article.slug}`}
+                  href={`/news/${article.slug}`}
                   className="flex items-center gap-2 text-sm hover:text-white/80 transition-colors flex-shrink-0"
                 >
                   <span className="text-white/70">

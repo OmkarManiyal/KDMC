@@ -64,10 +64,10 @@ export default function Header() {
 
   return (
     <header
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 border-b border-gray-100 dark:border-slate-800 ${
         isScrolled
-          ? 'bg-white/95 dark:bg-slate-900/95 backdrop-blur-sm shadow-sm py-3'
-          : 'bg-white dark:bg-slate-900 py-5'
+          ? 'bg-white/98 dark:bg-slate-900/98 backdrop-blur-sm shadow-sm py-3'
+          : 'bg-white dark:bg-slate-900 py-4'
       }`}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -77,7 +77,7 @@ export default function Header() {
               <Newspaper className="w-6 h-6 text-white" />
             </div>
             <div>
-              <span className="text-xl font-serif font-bold text-primary dark:text-white">
+              <span className="text-xl font-serif font-bold text-gray-900 dark:text-white">
                 {siteSettings.site_name}
               </span>
               <span className="hidden sm:block text-xs text-gray-500 dark:text-gray-400">
@@ -86,13 +86,13 @@ export default function Header() {
             </div>
           </Link>
 
-          <nav className="hidden lg:flex items-center gap-6">
+          <nav className="hidden lg:flex items-center gap-1">
             <Link
               href="/"
-              className={`text-sm font-medium transition-colors ${
+              className={`px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
                 pathname === '/'
-                  ? 'text-accent'
-                  : 'text-gray-600 hover:text-primary dark:text-gray-300 dark:hover:text-white'
+                  ? 'text-accent bg-accent/5'
+                  : 'text-gray-700 hover:text-primary hover:bg-gray-50 dark:text-gray-300 dark:hover:text-white dark:hover:bg-slate-800'
               }`}
             >
               Home
@@ -101,10 +101,10 @@ export default function Header() {
               <Link
                 key={category.id}
                 href={`/category/${category.slug}`}
-                className={`text-sm font-medium transition-colors ${
+                className={`px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
                   pathname === `/category/${category.slug}`
-                    ? 'text-accent'
-                    : 'text-gray-600 hover:text-primary dark:text-gray-300 dark:hover:text-white'
+                    ? 'text-accent bg-accent/5'
+                    : 'text-gray-700 hover:text-primary hover:bg-gray-50 dark:text-gray-300 dark:hover:text-white dark:hover:bg-slate-800'
                 }`}
               >
                 {category.name}
@@ -148,13 +148,13 @@ export default function Header() {
             isMobileMenuOpen ? 'block' : 'hidden'
           }`}
         >
-          <div className="flex flex-col gap-2 pt-4">
+          <div className="flex flex-col gap-1 pt-4">
             <Link
               href="/"
-              className={`px-4 py-2 rounded-lg font-medium transition-colors ${
+              className={`px-4 py-2.5 rounded-lg font-medium transition-colors ${
                 pathname === '/'
                   ? 'bg-primary text-white'
-                  : 'text-gray-600 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-slate-800'
+                  : 'text-gray-800 hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-slate-800'
               }`}
             >
               Home
@@ -163,10 +163,10 @@ export default function Header() {
               <Link
                 key={category.id}
                 href={`/category/${category.slug}`}
-                className={`px-4 py-2 rounded-lg font-medium transition-colors ${
+                className={`px-4 py-2.5 rounded-lg font-medium transition-colors ${
                   pathname === `/category/${category.slug}`
                     ? 'bg-primary text-white'
-                    : 'text-gray-600 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-slate-800'
+                    : 'text-gray-800 hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-slate-800'
                 }`}
               >
                 {category.name}
