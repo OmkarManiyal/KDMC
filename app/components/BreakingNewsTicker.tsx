@@ -30,13 +30,13 @@ export default function BreakingNewsTicker() {
 
   return (
     <div
-      className="bg-accent text-white py-2 overflow-hidden"
+      className="bg-red-600 dark:bg-red-800 text-white py-2 overflow-hidden"
       onMouseEnter={() => setIsPaused(true)}
       onMouseLeave={() => setIsPaused(false)}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center gap-4">
-          <span className="flex-shrink-0 bg-white text-accent px-3 py-1 rounded font-mono text-xs font-bold uppercase tracking-wider">
+          <span className="flex-shrink-0 bg-white text-red-600 px-3 py-1 rounded font-bold text-xs uppercase tracking-wider">
             Latest
           </span>
           <div className="flex-1 overflow-hidden">
@@ -51,7 +51,7 @@ export default function BreakingNewsTicker() {
                 <Link
                   key={`${article.id}-${idx}`}
                   href={`/news/${article.slug}`}
-                  className="flex items-center gap-2 text-sm hover:text-white/80 transition-colors flex-shrink-0"
+                  className="flex items-center gap-2 text-sm font-medium hover:text-white/80 transition-colors flex-shrink-0"
                 >
                   <span className="text-white/70">
                     <ExternalLink className="w-3 h-3 inline" />

@@ -71,7 +71,7 @@ export default function CategoryPage({ params }: { params: { slug: string } }) {
           <nav className="mb-8">
             <Link
               href="/"
-              className="inline-flex items-center gap-2 text-gray-500 hover:text-primary transition-colors"
+              className="inline-flex items-center gap-2 text-gray-600 dark:text-gray-400 hover:text-blue-700 dark:hover:text-blue-400 transition-colors font-medium"
             >
               <ArrowLeft className="w-4 h-4" />
               Back to Home
@@ -79,17 +79,17 @@ export default function CategoryPage({ params }: { params: { slug: string } }) {
           </nav>
 
           <header className="mb-12">
-            <p className="text-accent font-medium uppercase tracking-wider text-sm mb-2">
+            <p className="text-blue-700 dark:text-blue-400 font-semibold uppercase tracking-wider text-sm mb-2">
               Category
             </p>
-            <h1 className="text-4xl md:text-5xl font-serif font-bold text-gray-900 dark:text-white mb-4">
+            <h1 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-4 font-serif">
               {category?.name || meta.title}
             </h1>
-            <p className="text-xl text-gray-600 dark:text-gray-400">
+            <p className="text-xl text-gray-600 dark:text-gray-400 leading-relaxed">
               {category?.description || meta.description}
             </p>
-            <div className="mt-4 flex items-center gap-4 text-sm text-gray-500">
-              <span className="bg-primary/10 text-primary px-3 py-1 rounded-full font-medium">
+            <div className="mt-4 flex items-center gap-4 text-sm">
+              <span className="bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-300 px-3 py-1 rounded-full font-semibold">
                 {articles.length} {articles.length === 1 ? 'article' : 'articles'}
               </span>
             </div>
@@ -111,10 +111,10 @@ export default function CategoryPage({ params }: { params: { slug: string } }) {
               <div className="w-16 h-16 bg-red-100 dark:bg-red-900/30 rounded-full flex items-center justify-center mx-auto mb-4">
                 <Inbox className="w-8 h-8 text-red-500" />
               </div>
-              <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">
+              <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2">
                 Error Loading Articles
               </h3>
-              <p className="text-gray-600 dark:text-gray-400">{error}</p>
+              <p className="text-gray-600 dark:text-gray-400 font-medium">{error}</p>
             </div>
           ) : articles.length > 0 ? (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -123,19 +123,19 @@ export default function CategoryPage({ params }: { params: { slug: string } }) {
               ))}
             </div>
           ) : (
-            <div className="text-center py-16 bg-gray-50 dark:bg-slate-800/50 rounded-2xl">
-              <div className="w-16 h-16 bg-gray-100 dark:bg-slate-700 rounded-full flex items-center justify-center mx-auto mb-4">
+            <div className="text-center py-16 bg-gray-100 dark:bg-slate-800/50 rounded-2xl border border-gray-200 dark:border-slate-700">
+              <div className="w-16 h-16 bg-gray-200 dark:bg-slate-700 rounded-full flex items-center justify-center mx-auto mb-4">
                 <Inbox className="w-8 h-8 text-gray-400" />
               </div>
-              <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">
+              <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2">
                 No articles yet
               </h3>
-              <p className="text-gray-600 dark:text-gray-400">
+              <p className="text-gray-600 dark:text-gray-400 font-medium">
                 No articles found in this category yet. Check back soon!
               </p>
               <Link
                 href="/admin/new"
-                className="inline-block mt-4 text-accent hover:underline font-medium"
+                className="inline-block mt-4 text-blue-700 dark:text-blue-400 hover:underline font-semibold"
               >
                 Create the first article →
               </Link>

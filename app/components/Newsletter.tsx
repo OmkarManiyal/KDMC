@@ -35,10 +35,10 @@ export default function Newsletter() {
   return (
     <section className="bg-gradient-to-r from-blue-900 via-blue-800 to-blue-900 dark:from-blue-950 dark:via-blue-900 dark:to-blue-950 rounded-2xl p-8 md:p-12 text-white">
       <div className="max-w-2xl mx-auto text-center">
-        <h2 className="text-2xl md:text-3xl font-serif font-bold">
+        <h2 className="text-2xl md:text-3xl font-bold">
           Stay Informed
         </h2>
-        <p className="mt-3 text-white/80">
+        <p className="mt-3 text-white/80 leading-relaxed">
           Get the latest news, announcements, and civic updates delivered to your inbox. No spam, unsubscribe anytime.
         </p>
         <form onSubmit={handleSubmit} className="mt-6">
@@ -53,12 +53,12 @@ export default function Newsletter() {
                   setError('');
                 }}
                 placeholder="your.email@example.com"
-                className={`w-full px-4 py-3 rounded-lg bg-white/10 border-2 ${
+                className={`w-full px-4 py-3 rounded-lg bg-white/10 border-2 font-medium ${
                   status === 'error' ? 'border-red-400' : 'border-white/20'
                 } placeholder-white/50 text-white focus:outline-none focus:border-white/50 transition-colors`}
               />
               {status === 'error' && (
-                <div className="absolute -bottom-6 left-0 flex items-center gap-1 text-red-300 text-sm">
+                <div className="absolute -bottom-6 left-0 flex items-center gap-1 text-red-300 text-sm font-medium">
                   <AlertCircle className="w-4 h-4" />
                   <span>{error}</span>
                 </div>
@@ -67,7 +67,7 @@ export default function Newsletter() {
             <button
               type="submit"
               disabled={status === 'loading' || status === 'success'}
-              className={`px-6 py-3 rounded-lg font-semibold flex items-center justify-center gap-2 transition-all ${
+              className={`px-6 py-3 rounded-lg font-bold flex items-center justify-center gap-2 transition-all ${
                 status === 'success'
                   ? 'bg-emerald-500 text-white'
                   : 'bg-white text-blue-900 hover:bg-blue-50'
@@ -94,7 +94,7 @@ export default function Newsletter() {
             </button>
           </div>
         </form>
-        <p className="mt-8 text-sm text-white/60">
+        <p className="mt-8 text-sm text-white/60 font-medium">
           By subscribing, you agree to receive emails from KDMC News. We respect your privacy.
         </p>
       </div>

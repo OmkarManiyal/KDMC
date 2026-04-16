@@ -46,7 +46,7 @@ export default function CategoryBadge({ category, size = 'sm', showIcon = false 
 
   return (
     <span
-      className={`inline-flex items-center gap-1.5 rounded-full font-mono font-semibold uppercase tracking-wider ${styles.bg} ${styles.text} ${sizeClasses[size]}`}
+      className={`inline-flex items-center gap-1.5 rounded-full font-semibold uppercase tracking-wide ${styles.bg} ${styles.text} ${sizeClasses[size]}`}
     >
       {displayIcon}
       {category.replace('-', ' ')}
@@ -67,7 +67,7 @@ export function CategoryCard({ name, slug, description, color, icon, articleCoun
   return (
     <Link
       href={`/category/${slug}`}
-      className="group bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 p-6 flex items-start gap-4 rounded-xl transition-all hover:shadow-lg hover:border-blue-300 dark:hover:border-blue-600"
+      className="group bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-700 p-6 flex items-start gap-4 rounded-xl transition-all hover:shadow-lg hover:border-blue-300 dark:hover:border-blue-600"
     >
       <div
         className="w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0"
@@ -77,7 +77,7 @@ export function CategoryCard({ name, slug, description, color, icon, articleCoun
       </div>
       <div className="flex-1 min-w-0">
         <div className="flex items-center justify-between">
-          <h3 className="font-bold text-gray-900 dark:text-white text-lg group-hover:text-blue-700 dark:group-hover:text-blue-400 transition-colors">
+          <h3 className="font-bold text-gray-900 dark:text-white text-lg group-hover:text-blue-700 dark:group-hover:text-blue-400 transition-colors font-serif">
             {name}
           </h3>
           {articleCount !== undefined && (
@@ -86,7 +86,7 @@ export function CategoryCard({ name, slug, description, color, icon, articleCoun
             </span>
           )}
         </div>
-        <p className="mt-1 text-sm text-gray-600 dark:text-gray-400 line-clamp-2">
+        <p className="mt-1 text-sm text-gray-600 dark:text-gray-400 line-clamp-2 leading-relaxed">
           {description}
         </p>
       </div>

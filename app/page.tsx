@@ -57,7 +57,7 @@ export default async function HomePage() {
                         <span className="text-[10px] font-bold">ED</span>
                       </div>
                     </div>
-                    <p className="mt-6 text-blue-200 font-mono text-xs uppercase tracking-widest font-semibold">
+                    <p className="mt-6 text-blue-200 font-semibold text-xs uppercase tracking-widest">
                       From the Editor
                     </p>
                     <h2 className="mt-2 text-2xl font-bold">
@@ -66,7 +66,7 @@ export default async function HomePage() {
                     <p className="text-white/80 text-sm font-medium">
                       {settings.editor_role || fallbackSettings.editor_role}
                     </p>
-                    <blockquote className="mt-4 text-white/90 italic text-sm border-l-4 border-red-500 pl-4 text-left w-full">
+                    <blockquote className="mt-4 text-white/90 italic text-sm border-l-4 border-red-500 pl-4 text-left w-full leading-relaxed">
                       {settings.editor_message || fallbackSettings.editor_message}
                     </blockquote>
                     <div className="mt-6 flex gap-3">
@@ -85,7 +85,7 @@ export default async function HomePage() {
                 {featuredArticles.length > 0 ? (
                   <ArticleCard article={featuredArticles[0]} variant="featured" />
                 ) : (
-                  <div className="bg-gray-100 dark:bg-gray-800 rounded-2xl p-12 text-center border border-gray-200 dark:border-gray-700">
+                  <div className="bg-gray-100 dark:bg-slate-800 rounded-2xl p-12 text-center border border-gray-200 dark:border-slate-700">
                     <p className="text-gray-700 dark:text-gray-400 font-medium">
                       No featured articles yet. Create one from the admin panel!
                     </p>
@@ -96,12 +96,12 @@ export default async function HomePage() {
           </section>
 
           {trendingArticles.length > 0 && (
-            <section className="py-12 border-t border-gray-200 dark:border-gray-800">
+            <section className="py-12 border-t border-gray-200 dark:border-slate-800">
               <div className="flex items-center gap-3 mb-8">
                 <div className="w-10 h-10 bg-red-100 dark:bg-red-900/30 rounded-lg flex items-center justify-center">
                   <TrendingUp className="w-5 h-5 text-red-600 dark:text-red-400" />
                 </div>
-                <h2 className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white">
+                <h2 className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white font-serif">
                   Trending in Your Area
                 </h2>
               </div>
@@ -113,9 +113,9 @@ export default async function HomePage() {
             </section>
           )}
 
-          <section className="py-12 border-t border-gray-200 dark:border-gray-800">
+          <section className="py-12 border-t border-gray-200 dark:border-slate-800">
             <div className="flex items-center justify-between mb-8">
-              <h2 className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white">
+              <h2 className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white font-serif">
                 Latest News
               </h2>
               <Link
@@ -132,7 +132,7 @@ export default async function HomePage() {
                 ))}
               </div>
             ) : (
-              <div className="text-center py-12 bg-gray-100 dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700">
+              <div className="text-center py-12 bg-gray-100 dark:bg-slate-800 rounded-xl border border-gray-200 dark:border-slate-700">
                 <p className="text-gray-700 dark:text-gray-400 font-medium">
                   No articles yet. Check back soon!
                 </p>
@@ -140,8 +140,8 @@ export default async function HomePage() {
             )}
           </section>
 
-          <section className="py-12 border-t border-gray-200 dark:border-gray-800">
-            <h2 className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white mb-8">
+          <section className="py-12 border-t border-gray-200 dark:border-slate-800">
+            <h2 className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white font-serif mb-8">
               Browse by Category
             </h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">

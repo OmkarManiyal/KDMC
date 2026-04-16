@@ -81,15 +81,15 @@ export default function ArticleCard({ article, variant = 'default' }: ArticleCar
         <div className="absolute bottom-0 left-0 right-0 p-6 md:p-8">
           <CategoryBadge category={article.category} size="sm" />
           <Link href={articleUrl}>
-            <h2 className="mt-3 text-2xl md:text-3xl lg:text-4xl font-serif font-bold text-white leading-tight text-balance group-hover:text-blue-200 transition-colors">
+            <h2 className="mt-3 text-2xl md:text-3xl lg:text-4xl font-bold text-white leading-tight text-balance group-hover:text-blue-200 transition-colors font-serif">
               {article.title}
             </h2>
           </Link>
           <p className="mt-3 text-gray-200 text-sm md:text-base line-clamp-2 max-w-3xl">
             {article.excerpt}
           </p>
-          <div className="mt-4 flex items-center gap-4 text-sm text-gray-300">
-            <span className="font-medium">{article.author}</span>
+          <div className="mt-4 flex items-center gap-4 text-sm text-gray-300 font-medium">
+            <span>{article.author}</span>
             <span>•</span>
             <span>{formatDateShort(article.created_at)}</span>
             <span>•</span>
@@ -102,7 +102,7 @@ export default function ArticleCard({ article, variant = 'default' }: ArticleCar
 
   if (variant === 'horizontal') {
     return (
-      <article className="group bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 overflow-hidden flex flex-col sm:flex-row rounded-xl transition-all hover:shadow-lg">
+      <article className="group bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-700 overflow-hidden flex flex-col sm:flex-row rounded-xl transition-all hover:shadow-lg">
         <div className="relative h-48 sm:h-auto sm:w-1/3">
           <ArticleImage
             src={article.featured_image}
@@ -115,11 +115,11 @@ export default function ArticleCard({ article, variant = 'default' }: ArticleCar
         <div className="flex-1 p-5 flex flex-col">
           <CategoryBadge category={article.category} size="sm" />
           <Link href={articleUrl}>
-            <h3 className="mt-2 text-lg font-bold text-gray-900 dark:text-white leading-snug group-hover:text-blue-700 dark:group-hover:text-blue-400 transition-colors line-clamp-2">
+            <h3 className="mt-2 text-lg font-bold text-gray-900 dark:text-white leading-snug group-hover:text-blue-700 dark:group-hover:text-blue-400 transition-colors line-clamp-2 font-serif">
               {article.title}
             </h3>
           </Link>
-          <p className="mt-2 text-sm text-gray-600 dark:text-gray-400 line-clamp-2 flex-1">
+          <p className="mt-2 text-sm text-gray-600 dark:text-gray-400 line-clamp-2 flex-1 leading-relaxed">
             {article.excerpt}
           </p>
           <div className="mt-4 flex items-center gap-3 text-xs text-gray-600 dark:text-gray-400 font-medium">
@@ -134,7 +134,7 @@ export default function ArticleCard({ article, variant = 'default' }: ArticleCar
 
   if (variant === 'compact') {
     return (
-      <article className="group py-4 border-b border-gray-100 dark:border-gray-800 last:border-b-0">
+      <article className="group py-4 border-b border-gray-100 dark:border-slate-800 last:border-b-0">
         <div className="flex items-start gap-3">
           <div className="flex-1 min-w-0">
             <CategoryBadge category={article.category} size="xs" />
@@ -153,7 +153,7 @@ export default function ArticleCard({ article, variant = 'default' }: ArticleCar
   }
 
   return (
-    <article className="group bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 overflow-hidden rounded-xl transition-all hover:shadow-lg">
+    <article className="group bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-700 overflow-hidden rounded-xl transition-all hover:shadow-lg">
       <div className="relative h-48 overflow-hidden">
         <ArticleImage
           src={article.featured_image}
@@ -166,11 +166,11 @@ export default function ArticleCard({ article, variant = 'default' }: ArticleCar
       <div className="p-5">
         <CategoryBadge category={article.category} size="sm" />
         <Link href={articleUrl}>
-          <h3 className="mt-2 text-lg font-bold text-gray-900 dark:text-white leading-snug group-hover:text-blue-700 dark:group-hover:text-blue-400 transition-colors line-clamp-2">
+          <h3 className="mt-2 text-lg font-bold text-gray-900 dark:text-white leading-snug group-hover:text-blue-700 dark:group-hover:text-blue-400 transition-colors line-clamp-2 font-serif">
             {article.title}
           </h3>
         </Link>
-        <p className="mt-2 text-sm text-gray-600 dark:text-gray-400 line-clamp-3">
+        <p className="mt-2 text-sm text-gray-600 dark:text-gray-400 line-clamp-3 leading-relaxed">
           {article.excerpt}
         </p>
         <div className="mt-4 flex items-center justify-between text-xs text-gray-600 dark:text-gray-400 font-medium">

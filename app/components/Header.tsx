@@ -47,8 +47,8 @@ export default function Header() {
 
   return (
     <header
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 bg-white dark:bg-gray-950 border-b border-gray-200 dark:border-gray-800 ${
-        isScrolled ? 'shadow-sm py-3' : 'py-4'
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 bg-white dark:bg-slate-900 border-b border-gray-200 dark:border-slate-800 ${
+        isScrolled ? 'shadow-md py-2' : 'py-3'
       }`}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -58,10 +58,10 @@ export default function Header() {
               <Newspaper className="w-6 h-6 text-white" />
             </div>
             <div>
-              <span className="text-xl font-serif font-bold text-gray-900 dark:text-white">
+              <span className="text-xl font-bold text-gray-900 dark:text-white">
                 {siteSettings.site_name}
               </span>
-              <span className="hidden sm:block text-xs text-gray-600 dark:text-gray-400">
+              <span className="hidden sm:block text-xs text-gray-500 dark:text-gray-400 font-medium">
                 by {siteSettings.editor_name}
               </span>
             </div>
@@ -70,10 +70,10 @@ export default function Header() {
           <nav className="hidden lg:flex items-center gap-1">
             <Link
               href="/"
-              className={`px-3 py-2 rounded-lg text-sm font-semibold transition-colors ${
+              className={`px-4 py-2 rounded-lg text-sm font-semibold transition-colors ${
                 pathname === '/'
-                  ? 'text-blue-700 dark:text-blue-400 bg-blue-50 dark:bg-blue-950'
-                  : 'text-gray-800 dark:text-gray-300 hover:text-blue-700 dark:hover:text-blue-400 hover:bg-gray-100 dark:hover:bg-gray-900'
+                  ? 'text-blue-700 dark:text-blue-400 bg-blue-50 dark:bg-slate-800'
+                  : 'text-gray-700 dark:text-gray-300 hover:text-blue-700 dark:hover:text-blue-400 hover:bg-gray-100 dark:hover:bg-slate-800'
               }`}
             >
               Home
@@ -82,10 +82,10 @@ export default function Header() {
               <Link
                 key={category.id}
                 href={`/category/${category.slug}`}
-                className={`px-3 py-2 rounded-lg text-sm font-semibold transition-colors ${
+                className={`px-4 py-2 rounded-lg text-sm font-semibold transition-colors ${
                   pathname === `/category/${category.slug}`
-                    ? 'text-blue-700 dark:text-blue-400 bg-blue-50 dark:bg-blue-950'
-                    : 'text-gray-800 dark:text-gray-300 hover:text-blue-700 dark:hover:text-blue-400 hover:bg-gray-100 dark:hover:bg-gray-900'
+                    ? 'text-blue-700 dark:text-blue-400 bg-blue-50 dark:bg-slate-800'
+                    : 'text-gray-700 dark:text-gray-300 hover:text-blue-700 dark:hover:text-blue-400 hover:bg-gray-100 dark:hover:bg-slate-800'
                 }`}
               >
                 {category.name}
@@ -93,17 +93,17 @@ export default function Header() {
             ))}
           </nav>
 
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-1">
             <button
               onClick={() => setIsSearchOpen(!isSearchOpen)}
-              className="p-2 rounded-lg text-gray-700 dark:text-gray-400 hover:text-blue-700 dark:hover:text-blue-400 hover:bg-gray-100 dark:hover:bg-gray-900 transition-colors"
+              className="p-2 rounded-lg text-gray-600 dark:text-gray-400 hover:text-blue-700 dark:hover:text-blue-400 hover:bg-gray-100 dark:hover:bg-slate-800 transition-colors"
               aria-label="Search"
             >
               <Search className="w-5 h-5" />
             </button>
             <button
               onClick={toggleTheme}
-              className="p-2 rounded-lg text-gray-700 dark:text-gray-400 hover:text-blue-700 dark:hover:text-blue-400 hover:bg-gray-100 dark:hover:bg-gray-900 transition-colors"
+              className="p-2 rounded-lg text-gray-600 dark:text-gray-400 hover:text-blue-700 dark:hover:text-blue-400 hover:bg-gray-100 dark:hover:bg-slate-800 transition-colors"
               aria-label="Toggle theme"
             >
               {theme === 'dark' ? (
@@ -114,7 +114,7 @@ export default function Header() {
             </button>
             <button
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              className="lg:hidden p-2 rounded-lg text-gray-700 dark:text-gray-400 hover:text-blue-700 dark:hover:text-blue-400 hover:bg-gray-100 dark:hover:bg-gray-900 transition-colors"
+              className="lg:hidden p-2 rounded-lg text-gray-600 dark:text-gray-400 hover:text-blue-700 dark:hover:text-blue-400 hover:bg-gray-100 dark:hover:bg-slate-800 transition-colors"
               aria-label="Menu"
             >
               {isMobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
@@ -129,7 +129,7 @@ export default function Header() {
         )}
 
         <nav
-          className={`lg:hidden mt-4 pb-4 border-t border-gray-200 dark:border-gray-800 ${
+          className={`lg:hidden mt-4 pb-4 border-t border-gray-200 dark:border-slate-800 ${
             isMobileMenuOpen ? 'block' : 'hidden'
           }`}
         >
@@ -139,7 +139,7 @@ export default function Header() {
               className={`px-4 py-2.5 rounded-lg font-semibold transition-colors ${
                 pathname === '/'
                   ? 'bg-blue-900 dark:bg-blue-800 text-white'
-                  : 'text-gray-900 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-900'
+                  : 'text-gray-900 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-slate-800'
               }`}
             >
               Home
@@ -151,7 +151,7 @@ export default function Header() {
                 className={`px-4 py-2.5 rounded-lg font-semibold transition-colors ${
                   pathname === `/category/${category.slug}`
                     ? 'bg-blue-900 dark:bg-blue-800 text-white'
-                    : 'text-gray-900 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-900'
+                    : 'text-gray-900 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-slate-800'
                 }`}
               >
                 {category.name}
