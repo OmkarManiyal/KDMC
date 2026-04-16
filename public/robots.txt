@@ -6,7 +6,10 @@ Allow: /
 Disallow: /admin/
 
 # Sitemap
-Sitemap: https://kdmc.news/sitemap.xml
+Sitemap: https://kdmc.vercel.app/sitemap.xml
+
+# RSS Feed
+Allow: /api/rss
 
 # Crawl-delay for polite crawling
 Crawl-delay: 1

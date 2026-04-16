@@ -66,6 +66,9 @@ export const metadata: Metadata = {
   },
   alternates: {
     canonical: "https://kdmc.vercel.app",
+    types: {
+      "application/rss+xml": "/api/rss",
+    },
   },
   category: "News",
 };
@@ -81,6 +84,7 @@ export default function RootLayout({
         <link rel="icon" href="/favicon.ico" />
         <link rel="apple-touch-icon" href="/images/apple-touch-icon.png" />
         <link rel="manifest" href="/manifest.json" />
+        <link rel="alternate" type="application/rss+xml" title="KDMC News RSS Feed" href="/api/rss" />
         <meta name="theme-color" content="#1e3a8a" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <script
